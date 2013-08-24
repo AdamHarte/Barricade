@@ -13,7 +13,7 @@ class Barricade extends FlxGame
 	{
 		var stageWidth:Int = Lib.current.stage.stageWidth;
 		var stageHeight:Int = Lib.current.stage.stageHeight;
-		var zoomLevel:Int = 2; // 200, 120
+		var zoomLevel:Int = 4; // 200, 120
 		var ratioX:Float = stageWidth / (800 / zoomLevel);
 		var ratioY:Float = stageHeight / (480 / zoomLevel);
 		var ratio:Float = Math.min(ratioX, ratioY);
