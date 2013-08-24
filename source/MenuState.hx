@@ -12,6 +12,10 @@ import org.flixel.FlxState;
 import org.flixel.FlxText;
 import org.flixel.util.FlxMath;
 
+/**
+ * ...
+ * @author Adam Harte (adam@adamharte.com)
+ */
 class MenuState extends FlxState
 {
 	/**
@@ -20,11 +24,32 @@ class MenuState extends FlxState
 	override public function create():Void
 	{
 		// Set a background color
-		FlxG.bgColor = 0xff131c1b;
+		FlxG.bgColor = 0xff1e2936;
 		// Show the mouse (in case it hasn't been disabled)
 		#if !FLX_NO_MOUSE
 		FlxG.mouse.show();
 		#end
+		
+		
+		var title:FlxText = new FlxText(0, FlxG.height / 3, 256, 'Barricade');
+		title.x = (FlxG.width - title.width) / 2;
+		title.setFormat(null, 42, 0x31a2ee, 'center');
+		title.antialiasing = true;
+		add(title);
+		
+		var playButton:FlxButton = new FlxButton(0, FlxG.height / 3 + 62, 'PLAY', playClickHandler);
+		playButton.x = (FlxG.width - playButton.width) / 2;
+		//TODO: Maybe scale buttons.
+		playButton.color = 0x31a2ee;
+		playButton.label.color = 0x31a2ee;
+		add(playButton);
+		
+		
+		FlxG.flash(0xff31a2ee, 0.4);
+		
+		
+		//TEMP: go straigt to the play state.
+		FlxG.switchState(new PlayState());
 		
 		super.create();
 	}
@@ -44,5 +69,15 @@ class MenuState extends FlxState
 	override public function update():Void
 	{
 		super.update();
-	}	
+	}
+	
+	
+	
+	
+	function playClickHandler() 
+	{
+		FlxG.switchState(new PlayState());
+	}
+	
+	
 }
