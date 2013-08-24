@@ -18,6 +18,7 @@ class PlayState extends FlxState
 	
 	private var _player:Player;
 	private var _tileMap:FlxTilemap;
+	private var _bullets:FlxGroup;
 	private var _objects:FlxGroup;
 	
 	
@@ -33,14 +34,20 @@ class PlayState extends FlxState
 	{
 		FlxG.bgColor = 0xff1e2936;
 		
+		// Generate levels.
+		Reg.addLevel('assets/levels/01.png');
+		Reg.addLevel('assets/levels/02.png');
+		
+		
+		
 		_tileMap = new FlxTilemap();
-		//_tileMap.loadMap(Assets.getText('assets/default_level.txt'), 'assets/level_tiles.png', TILE_WIDTH, TILE_HEIGHT, FlxTilemap.AUTO);
-		var levelBMP:BitmapData = Assets.getBitmapData('assets/level01.png');
-		var levelCSV:String = FlxTilemap.bitmapToCSV(levelBMP);
-		_tileMap.loadMap(levelCSV, 'assets/level_tiles.png', TILE_WIDTH, TILE_HEIGHT, FlxTilemap.AUTO);
+		_tileMap.loadMap(Reg.levels[Reg.level], 'assets/level_tiles.png', TILE_WIDTH, TILE_HEIGHT, FlxTilemap.AUTO);
 		add(_tileMap);
 		
-		_player = new Player(40, 40);
+		_bullets = new FlxGroup();
+		_bullets.maxSize = 50; //TODO: Test how big this pool should be.
+		
+		_player = new Player(40, 40, _bullets);
 		
 		
 		
@@ -53,9 +60,11 @@ class PlayState extends FlxState
 		FlxG.camera.follow(_player, FlxCamera.STYLE_PLATFORMER);
 		//FlxG.camera.zoom = 2;
 		
+		add(_bullets);
 		
 		_objects = new FlxGroup();
 		_objects.add(_player);
+		_objects.add(_bullets);
 		
 		super.create();
 	}
@@ -65,6 +74,7 @@ class PlayState extends FlxState
 		super.destroy();
 		
 		_player = null;
+		_bullets = null;
 		
 		_objects = null;
 		

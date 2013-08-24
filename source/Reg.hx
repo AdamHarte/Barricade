@@ -1,6 +1,9 @@
 package;
 
+import flash.display.BitmapData;
+import openfl.Assets;
 import org.flixel.FlxSave;
+import org.flixel.FlxTilemap;
 
 /**
  * ...
@@ -16,7 +19,7 @@ class Reg
 	 * Generic levels Array that can be used for cross-state stuff.
 	 * Example usage: Storing the levels of a platformer.
 	 */
-	static public var levels:Array<Dynamic> = [];
+	static public var levels:Array<String> = [];
 	/**
 	 * Generic level variable that can be used for cross-state stuff.
 	 * Example usage: Storing the current level number.
@@ -43,4 +46,13 @@ class Reg
 	 * your state if you want to use the same save flixel uses internally
 	 */
 	static public var save:FlxSave;
+	
+	
+	
+	static public function addLevel(levelPath:String):Void 
+	{
+		var levelBMP:BitmapData = Assets.getBitmapData(levelPath);
+		var levelCSV:String = FlxTilemap.bitmapToCSV(levelBMP);
+		Reg.levels.push(levelCSV);
+	}
 }
