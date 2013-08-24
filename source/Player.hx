@@ -13,21 +13,27 @@ import org.flixel.util.FlxPoint;
  */
 class Player extends FlxSprite
 {
+	private static var MAX_HEALTH:Int = 10;
+	
 	private var _jumpPower:Int;
 	private var _bullets:FlxGroup;
+	private var _restart:Float;
+	private var _spawnPoint:FlxPoint;
 	
 	
-	public function new(x:Int, y:Int, bullets:FlxGroup) 
+	public function new(startX:Float, startY:Float, bullets:FlxGroup) 
 	{
-		super(x, y);
+		super(startX, startY);
 		
+		_spawnPoint = new FlxPoint(startX, startY);
 		_bullets = bullets;
+		_restart = 0;
 		
 		loadGraphic('assets/player.png', true, true, 8, 8);
 		width = 6;
 		height = 7;
 		offset.x = 1;
-		offset.y = 0;
+		offset.y = 1;
 		
 		var runSpeed:Int = 80;
 		drag.x = runSpeed * 8;
@@ -41,7 +47,7 @@ class Player extends FlxSprite
 		addAnimation('run', [1, 2, 3, 4], 12);
 		addAnimation('jump', [4, 3, 5], 12, false);
 		
-		health = 100;
+		health = MAX_HEALTH;
 	}
 	
 	override public function destroy():Void
@@ -53,6 +59,16 @@ class Player extends FlxSprite
 	
 	override public function update():Void
 	{
+		if (!alive) 
+		{
+			_restart += FlxG.elapsed;
+			if (_restart > 2) 
+			{
+				respawn();
+			}
+			return;
+		}
+		
 		// Movement
 		acceleration.x = 0;
 		if(FlxG.keys.A)
@@ -67,7 +83,7 @@ class Player extends FlxSprite
 		}
 		
 		// Jumping
-		if ((FlxG.keys.justPressed('W') || FlxG.keys.justPressed('SPACE')) && velocity.y == 0) 
+		if (velocity.y == 0 && (FlxG.keys.justPressed('W') || FlxG.keys.justPressed('SPACE'))) 
 		{
 			velocity.y = -_jumpPower;
 			play('jump');
@@ -119,7 +135,8 @@ class Player extends FlxSprite
 	
 	override public function hurt(damage:Float):Void
 	{
-		
+		flicker(0.2);
+		//FlxG.camera.shake(0.002, 0.2);
 		
 		super.hurt(damage);
 	}
@@ -132,11 +149,29 @@ class Player extends FlxSprite
 		}
 		
 		super.kill();
-		
 		flicker(0);
+		exists = true;
+		visible = false;
+		velocity.make();
+		acceleration.x = 0;
 		
 		FlxG.camera.shake(0.05, 0.4);
+		//FlxG.camera.flash(0xffd8eba2, 0.35);
 		
+	}
+	
+	
+	
+	private function respawn() 
+	{
+		reset(_spawnPoint.x, _spawnPoint.y);
+		acceleration.x = 0;
+		velocity.make();
+		_restart = 0;
+		exists = true;
+		visible = true;
+		health = MAX_HEALTH;
+		flicker(1);
 	}
 	
 }

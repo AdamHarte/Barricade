@@ -19,7 +19,7 @@ class Reg
 	 * Generic levels Array that can be used for cross-state stuff.
 	 * Example usage: Storing the levels of a platformer.
 	 */
-	static public var levels:Array<String> = [];
+	static public var levels:Array<Level> = [];
 	/**
 	 * Generic level variable that can be used for cross-state stuff.
 	 * Example usage: Storing the current level number.
@@ -49,10 +49,14 @@ class Reg
 	
 	
 	
-	static public function addLevel(levelPath:String):Void 
+	static public function addLevel(levelName:String, fileName:String):Void 
 	{
-		var levelBMP:BitmapData = Assets.getBitmapData(levelPath);
-		var levelCSV:String = FlxTilemap.bitmapToCSV(levelBMP);
-		Reg.levels.push(levelCSV);
+		//var levelBMP:BitmapData = Assets.getBitmapData(levelPath);
+		//var levelCSV:String = FlxTilemap.bitmapToCSV(levelBMP);
+		var levelCSV:String = Assets.getText('assets/levels/' + fileName + '.csv');
+		var levelObjCSV:String = Assets.getText('assets/levels/' + fileName + '_objs.csv');
+		
+		var level:Level = new Level(levelName, levelCSV, levelObjCSV);
+		Reg.levels.push(level);
 	}
 }

@@ -5,7 +5,7 @@
     <movie outputType="Application" />
     <movie input="" />
     <movie path="Barricade.xml" />
-    <movie fps="30" />
+    <movie fps="60" />
     <movie width="800" />
     <movie height="480" />
     <movie version="3" />

@@ -8,6 +8,7 @@ import org.flixel.FlxObject;
 import org.flixel.FlxSprite;
 import org.flixel.FlxState;
 import org.flixel.FlxTilemap;
+import org.flixel.util.FlxPoint;
 import org.flixel.util.FlxRandom;
 
 /**
@@ -19,7 +20,11 @@ class PlayState extends FlxState
 	static private var TILE_WIDTH:Int = 8;
 	static private var TILE_HEIGHT:Int = 8;
 	
+	private var levelTilesPath:String;
+	private var levelObjectsPath:String;
+	
 	private var _tileMap:FlxTilemap;
+	private var _objectMap:FlxTilemap;
 	private var _player:Player;
 	private var _enemies:FlxGroup;
 	private var _bullets:FlxGroup;
@@ -29,9 +34,14 @@ class PlayState extends FlxState
 	private var _hazards:FlxGroup;
 	private var _objects:FlxGroup;
 	
+	private var _playerSpawn:FlxPoint;
+	private var _spawnPoint:FlxPoint;
+	
 	
 	public function new()
 	{
+		levelTilesPath = 'assets/level_tiles.png';
+		levelObjectsPath = 'assets/level_objects.png';
 		
 		super();
 	}
@@ -41,16 +51,18 @@ class PlayState extends FlxState
 		FlxG.bgColor = 0xff1e2936;
 		
 		// Generate levels.
-		Reg.addLevel('assets/levels/01.png');
-		Reg.addLevel('assets/levels/02.png');
+		Reg.addLevel('Main Entry', '01');
 		
+		_playerSpawn = new FlxPoint();
+		_spawnPoint = new FlxPoint();
 		
 		var _bg = new FlxSprite(0, 0, 'assets/bg.png');
 		_bg.scale.make(4.0, 4.0);
 		_bg.scrollFactor.make(0.2, 0.2);
 		
 		_tileMap = new FlxTilemap();
-		_tileMap.loadMap(Reg.levels[Reg.level], 'assets/level_tiles.png', TILE_WIDTH, TILE_HEIGHT, FlxTilemap.AUTO);
+		_objectMap = new FlxTilemap();
+		buildLevel();
 		
 		_enemies = new FlxGroup();
 		_enemies.maxSize = 50;
@@ -61,12 +73,12 @@ class PlayState extends FlxState
 		_enemyBullets = new FlxGroup();
 		_enemyBullets.maxSize = 100;
 		
-		
-		_player = new Player(40, 40, _bullets);
+		_player = new Player(_playerSpawn.x, _playerSpawn.y, _bullets);
 		
 		// Add all the things.
 		add(_bg);
 		add(_tileMap);
+		add(_objectMap);
 		add(_player);
 		add(_enemies);
 		add(_bullets);
@@ -83,7 +95,6 @@ class PlayState extends FlxState
 		_objects.add(_enemyBullets);
 		
 		// Setup camera.
-		FlxG.camera.setBounds(0, 0, 800, 800, true);
 		FlxG.camera.follow(_player, FlxCamera.STYLE_PLATFORMER);
 		//FlxG.camera.zoom = 4;
 		
@@ -115,10 +126,47 @@ class PlayState extends FlxState
 		if (FlxRandom.chanceRoll(2)) 
 		{
 			var enemy:Enemy = cast(_enemies.recycle(Enemy), Enemy);
-			enemy.init(FlxRandom.intRanged(0, FlxG.width), FlxRandom.intRanged(0, FlxG.height), _enemyBullets, _player);
+			//enemy.init(FlxRandom.intRanged(0, FlxG.width), FlxRandom.intRanged(0, FlxG.height), _enemyBullets, _player);
+			enemy.init(_spawnPoint.x, _spawnPoint.y, _enemyBullets, _player);
 		}
 		
 		super.update();
+	}
+	
+	
+	
+	private function buildLevel() 
+	{
+		var currentLevel:Level = Reg.levels[Reg.level];
+		
+		_tileMap.loadMap(currentLevel.data, levelTilesPath, TILE_WIDTH, TILE_HEIGHT, FlxTilemap.AUTO);
+		
+		// Place other objects
+		_objectMap.loadMap(currentLevel.objData, levelObjectsPath, TILE_WIDTH, TILE_HEIGHT);
+		for (ty in 0..._objectMap.heightInTiles) 
+		{
+			for (tx in 0..._objectMap.widthInTiles) 
+			{
+				var tileValue:Int = _objectMap.getTile(tx, ty);
+				switch (tileValue) 
+				{
+					case 0:
+						//
+					case 1: // Player
+						_objectMap.setTile(tx, ty, 0);
+						_playerSpawn.make(tx * TILE_WIDTH + (TILE_WIDTH / 2), ty * TILE_HEIGHT + (TILE_WIDTH / 2));
+					case 2: // Mainframe
+						//TODO: Turn the tile off, and use an animated sprite instead.
+						//_objectMap.setTile(tx, ty, 0);
+					case 4: // Spawner
+						_spawnPoint.make(tx * TILE_WIDTH + (TILE_WIDTH / 2), ty * TILE_HEIGHT + (TILE_WIDTH / 2));
+					default:
+						//trace('Unknown tile: ', tileValue);
+				}
+			}
+		}
+		
+		FlxG.camera.setBounds(0, 0, _tileMap.width, _tileMap.height, true);
 	}
 	
 	
@@ -129,7 +177,17 @@ class PlayState extends FlxState
 		{
 			sprite1.kill();
 		}
-		sprite2.hurt(1);
+		if (Std.is(sprite2, Player)) 
+		{
+			if (!sprite2.flickering) 
+			{
+				sprite2.hurt(1);
+			}
+		}
+		else 
+		{
+			sprite2.hurt(1);
+		}
 	}
 	
 }
