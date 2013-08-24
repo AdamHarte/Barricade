@@ -9,7 +9,7 @@ import org.flixel.util.FlxPoint;
  * ...
  * @author Adam Harte (adam@adamharte.com)
  */
-class Bullet extends FlxSprite
+class EnemyBullet extends FlxSprite
 {
 	public var speed:Float;
 	
@@ -17,7 +17,7 @@ class Bullet extends FlxSprite
 	{
 		super();
 		
-		speed = 180;
+		speed = 100;
 		
 		loadGraphic('assets/bullet.png', true);
 		//TODO: Maybe use loadRotatedGraphic instead.
@@ -102,4 +102,5 @@ class Bullet extends FlxSprite
 		velocity.x = Math.cos(rotationAngle) * speed;
 		velocity.y = Math.sin(rotationAngle) * speed;
 	}
+	
 }

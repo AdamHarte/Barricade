@@ -21,6 +21,8 @@ class Player extends FlxSprite
 	{
 		super(x, y);
 		
+		_bullets = bullets;
+		
 		loadGraphic('assets/player.png', true, true, 8, 8);
 		width = 6;
 		height = 7;
@@ -30,17 +32,16 @@ class Player extends FlxSprite
 		var runSpeed:Int = 80;
 		drag.x = runSpeed * 8;
 		acceleration.y = 420;
-		_jumpPower = 200;
+		_jumpPower = 200; //TODO: Find a good jump power value.
 		maxVelocity.x = runSpeed;
 		maxVelocity.y = _jumpPower;
 		
-		//Setup animations.
+		// 2Setup animations.
 		addAnimation('idle', [0]);
 		addAnimation('run', [1, 2, 3, 4], 12);
 		addAnimation('jump', [4, 3, 5], 12, false);
 		
-		_bullets = bullets;
-		
+		health = 100;
 	}
 	
 	override public function destroy():Void
@@ -52,7 +53,6 @@ class Player extends FlxSprite
 	
 	override public function update():Void
 	{
-		
 		// Movement
 		acceleration.x = 0;
 		if(FlxG.keys.A)
