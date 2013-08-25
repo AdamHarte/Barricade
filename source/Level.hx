@@ -19,7 +19,7 @@ class Level
 		this.levelName = levelName;
 		this.enemyCount = enemyCount;
 		data = Assets.getText('assets/levels/' + fileName + '.csv');
-		objData = Assets.getText('assets/levels/' + fileName + '_objs.csv');
+		objData = Assets.getText('assets/levels/' + fileName + 'b.csv');
 	}
 	
 }

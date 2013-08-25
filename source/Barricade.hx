@@ -30,6 +30,7 @@ class Barricade extends FlxGame
 	{
 		Reg.addLevel('Main Entry', '01', 20);
 		Reg.addLevel('Tunnel Entry', '02', 40);
+		Reg.addLevel('Tunnel Entry', '03', 60);
 		
 	}
 }

@@ -50,7 +50,7 @@ class PlayState extends FlxState
 	private var _playerStructures:FlxGroup;
 	
 	private var _playerSpawn:FlxPoint;
-	private var _spawnPoint:FlxPoint;
+	private var _spawnPoints:Array<FlxPoint>;
 	
 	
 	public function new()
@@ -59,9 +59,6 @@ class PlayState extends FlxState
 		levelObjectsPath = 'assets/level_objects.png';
 		Reg.shutdownTimer = 0;
 		Reg.isShutdown = false;
-		
-		//trace(FlxG.camera.getScale().x, FlxG.camera.getScale().y);
-		FlxG.camera.zoom = 1;
 		
 		super();
 	}
@@ -74,7 +71,7 @@ class PlayState extends FlxState
 		Reg.enemiesToSpawn = Reg.currentLevel.enemyCount;
 		
 		_playerSpawn = new FlxPoint();
-		_spawnPoint = new FlxPoint();
+		_spawnPoints = [];
 		
 		// Gibs
 		_playerGibs = new FlxEmitter();
@@ -238,7 +235,10 @@ class PlayState extends FlxState
 		FlxG.overlap(_hazards, _playerStructures, overlapHandler);
 		FlxG.overlap(_bullets, _hazards, overlapHandler);
 		
-		if (Reg.enemiesToSpawn > 0 && !Reg.isShutdown && FlxRandom.chanceRoll(2)) 
+		// Every 20 enemies int total increases change of spawn by 1 percent.
+		// The closer you get to killing all the enemies the bigger chance increase (up to 10 percent).
+		var chance:Int = Math.round(1 + (Reg.currentLevel.enemyCount / 20) + (10 * (Reg.enemiesKilled / Reg.currentLevel.enemyCount)));
+		if (Reg.enemiesToSpawn > 0 && !Reg.isShutdown && FlxRandom.chanceRoll(chance)) 
 		{
 			spawnEnemy();
 		}
@@ -259,7 +259,8 @@ class PlayState extends FlxState
 	{
 		Reg.enemiesToSpawn--;
 		var enemy:Enemy = cast(_enemies.recycle(Enemy), Enemy);
-		enemy.init(_spawnPoint.x, _spawnPoint.y, _enemyBullets, _player, _robotGibs, _mainframe);
+		var spawnPoint:FlxPoint = _spawnPoints[FlxRandom.intRanged(0, _spawnPoints.length-1)];
+		enemy.init(spawnPoint.x, spawnPoint.y, _enemyBullets, _player, _robotGibs, _mainframe);
 	}
 	
 	
@@ -286,7 +287,8 @@ class PlayState extends FlxState
 						_objectMap.setTile(tx, ty, 0);
 						_mainframe.init(tx * TILE_WIDTH + TILE_HALF_WIDTH, ty * TILE_HEIGHT + TILE_HALF_HEIGHT, _robotGibs);
 					case 3: // Spawner
-						_spawnPoint.make(tx * TILE_WIDTH + TILE_HALF_WIDTH, ty * TILE_HEIGHT + TILE_HALF_HEIGHT);
+						var spawnPoint:FlxPoint = new FlxPoint(tx * TILE_WIDTH + TILE_HALF_WIDTH, ty * TILE_HEIGHT + TILE_HALF_HEIGHT);
+						_spawnPoints.push(spawnPoint);
 					case 4: // Wall
 						_objectMap.setTile(tx, ty, 0);
 						var wall:Wall = cast(_walls.recycle(Wall), Wall);

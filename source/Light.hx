@@ -16,9 +16,9 @@ class Light extends FlxSprite
 		super();
 		
 		loadGraphic('assets/lights.png', true, true, 8, 8);
-		//width = 6;
+		width = 6;
 		//height = 7;
-		//offset.x = 1;
+		offset.x = 1;
 		//offset.y = 1;
 		
 		// Setup animations.
