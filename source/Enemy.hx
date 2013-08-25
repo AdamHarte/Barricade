@@ -135,14 +135,14 @@ class Enemy extends FlxSprite
 			_shootTimer = Math.max(_shootTimer - FlxG.elapsed, 0);
 			
 			// Shoot
-			var minShootRange:Int = 80; // Just under half the screen
-			var playerDist:Int = FlxMath.distanceBetween(this, _player);
-			var mainframeDist:Int = FlxMath.distanceBetween(this, _mainframe);
-			
-			if (_shootTimer == 0 && (playerDist < minShootRange || mainframeDist < minShootRange)) 
+			//TODO: These low level bots just always shoot, but better ones should be more targeted.
+			//var minShootRange:Int = 80; // Just under half the screen
+			//var playerDist:Int = FlxMath.distanceBetween(this, _player);
+			//var mainframeDist:Int = FlxMath.distanceBetween(this, _mainframe);
+			if (_shootTimer == 0 /*&& (playerDist < minShootRange || mainframeDist < minShootRange)*/) 
 			{
-				var canSeePlayer:Bool = Reg.tileMap.ray(getMidpoint(), _player.playerMidPoint);
-				if (canSeePlayer && FlxRandom.chanceRoll(_aggression)) 
+				//var canSeePlayer:Bool = Reg.tileMap.ray(getMidpoint(), _player.playerMidPoint);
+				if (/*canSeePlayer &&*/ FlxRandom.chanceRoll(_aggression)) 
 				{
 					shoot();
 				}
