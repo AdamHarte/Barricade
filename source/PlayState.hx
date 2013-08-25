@@ -1,5 +1,7 @@
 package ;
 import flash.display.BitmapData;
+import flash.display.BlendMode;
+import flash.Lib;
 import openfl.Assets;
 import org.flixel.FlxAssets;
 import org.flixel.FlxCamera;
@@ -28,6 +30,7 @@ class PlayState extends FlxState
 	private var levelTilesPath:String;
 	private var levelObjectsPath:String;
 	
+	private var _hud:HUD;
 	private var _tileMap:FlxTilemap;
 	private var _objectMap:FlxTilemap;
 	private var _player:Player;
@@ -36,8 +39,10 @@ class PlayState extends FlxState
 	private var _bullets:FlxGroup;
 	private var _enemyBullets:FlxGroup;
 	private var _walls:FlxGroup;
+	private var _lights:FlxGroup;
 	private var _playerGibs:FlxEmitter;
 	private var _robotGibs:FlxEmitter;
+	private var _darkness:FlxSprite;
 	
 	// Collision groups
 	private var _hazards:FlxGroup;
@@ -46,16 +51,17 @@ class PlayState extends FlxState
 	
 	private var _playerSpawn:FlxPoint;
 	private var _spawnPoint:FlxPoint;
-	private var _shutdownTimer:Float;
-	private var _isShutdown:Bool;
 	
 	
 	public function new()
 	{
 		levelTilesPath = 'assets/level_tiles.png';
 		levelObjectsPath = 'assets/level_objects.png';
-		_shutdownTimer = 0;
-		_isShutdown = false;
+		Reg.shutdownTimer = 0;
+		Reg.isShutdown = false;
+		
+		//trace(FlxG.camera.getScale().x, FlxG.camera.getScale().y);
+		FlxG.camera.zoom = 1;
 		
 		super();
 	}
@@ -100,6 +106,7 @@ class PlayState extends FlxState
 		_enemyBullets.maxSize = 100;
 		
 		_walls = new FlxGroup();
+		_lights = new FlxGroup();
 		
 		var _bg = new FlxSprite(0, 0, 'assets/bg.png');
 		_bg.scale.make(4.0, 4.0);
@@ -112,12 +119,20 @@ class PlayState extends FlxState
 		Reg.objectMap = _objectMap;
 		buildLevel();
 		
+		_darkness = new FlxSprite(0,0);
+		_darkness.makeGraphic(FlxG.width, FlxG.height, 0x00000000);
+		_darkness.scrollFactor.make();
+		_darkness.blend = BlendMode.MULTIPLY;
+		
 		_player = new Player(_playerSpawn.x, _playerSpawn.y, _bullets, _playerGibs);
+		
+		_hud = new HUD();
 		
 		// Add all the things.
 		add(_bg);
 		add(_tileMap);
 		add(_objectMap);
+		add(_lights);
 		add(_mainframe);
 		add(_walls);
 		add(_player);
@@ -126,6 +141,8 @@ class PlayState extends FlxState
 		add(_enemyBullets);
 		add(_playerGibs);
 		add(_robotGibs);
+		add(_darkness);
+		//add(_hud);
 		
 		_hazards = new FlxGroup();
 		_hazards.add(_enemies);
@@ -149,8 +166,10 @@ class PlayState extends FlxState
 		FlxG.camera.follow(_player, FlxCamera.STYLE_PLATFORMER);
 		//FlxG.camera.zoom = 4;
 		
-		FlxG.watch(_player, 'health', 'Player health');
-		FlxG.watch(Reg, 'enemiesToSpawn', 'enemiesToSpawn');
+		//FlxG.watch(_player, 'health', 'Player health');
+		//FlxG.watch(Reg, 'enemiesToSpawn', 'enemiesToSpawn');
+		
+		Lib.current.stage.addChild(Reg.gameHud);
 		
 		super.create();
 		
@@ -161,14 +180,17 @@ class PlayState extends FlxState
 	{
 		super.destroy();
 		
+		_hud = null;
 		_player = null;
 		_enemies = null;
 		_mainframe = null;
 		_bullets = null;
 		_enemyBullets = null;
 		_walls = null;
+		_lights = null;
 		_playerGibs = null;
 		_robotGibs = null;
+		_darkness = null;
 		
 		_hazards = null;
 		_objects = null;
@@ -177,6 +199,10 @@ class PlayState extends FlxState
 		_tileMap = null;
 		_objectMap = null;
 		
+		if (Reg.gameHud.stage != null && Lib.current.stage.contains(Reg.gameHud)) 
+		{
+			Lib.current.stage.removeChild(Reg.gameHud);
+		}
 	}
 	
 	override public function update():Void
@@ -187,18 +213,22 @@ class PlayState extends FlxState
 			FlxG.fade(0xff000000, 1, false, winLevelFadeHandler);
 		}
 		
-		_shutdownTimer += FlxG.elapsed;
-		if (_shutdownTimer > SHUTDOWN_TIME_LIMIT) 
+		Reg.shutdownTimer += FlxG.elapsed;
+		if (Reg.shutdownTimer > SHUTDOWN_TIME_LIMIT) 
 		{
-			_shutdownTimer = 0;
-			_isShutdown = !_isShutdown;
-			if (_isShutdown) 
+			Reg.shutdownTimer = 0;
+			Reg.isShutdown = !Reg.isShutdown;
+			if (Reg.isShutdown) 
 			{
+				FlxG.play('Shutdown');
 				_enemies.callAll('shutdown');
+				_darkness.fill(0x33000000);
 			}
 			else 
 			{
+				FlxG.play('Bootup');
 				_enemies.callAll('bootup');
+				_darkness.fill(0x00000000);
 			}
 		}
 		
@@ -208,12 +238,21 @@ class PlayState extends FlxState
 		FlxG.overlap(_hazards, _playerStructures, overlapHandler);
 		FlxG.overlap(_bullets, _hazards, overlapHandler);
 		
-		if (Reg.enemiesToSpawn > 0 && !_isShutdown && FlxRandom.chanceRoll(2)) 
+		if (Reg.enemiesToSpawn > 0 && !Reg.isShutdown && FlxRandom.chanceRoll(2)) 
 		{
 			spawnEnemy();
 		}
 		
+		Reg.gameHud.update();
+		
 		super.update();
+	}
+	
+	override public function draw():Void 
+	{
+		//_darkness.fill(0x33000000);
+		
+		super.draw();
 	}
 	
 	private function spawnEnemy() 
@@ -252,6 +291,14 @@ class PlayState extends FlxState
 						_objectMap.setTile(tx, ty, 0);
 						var wall:Wall = cast(_walls.recycle(Wall), Wall);
 						wall.init(tx * TILE_WIDTH + TILE_HALF_WIDTH, ty * TILE_HEIGHT + TILE_HALF_HEIGHT, _robotGibs);
+					case 5:
+						_objectMap.setTile(tx, ty, 0);
+						var light:Light = cast(_lights.recycle(Light), Light);
+						light.init(tx * TILE_WIDTH + TILE_HALF_WIDTH, ty * TILE_HEIGHT + TILE_HALF_HEIGHT, 0, _darkness);
+					case 6:
+						_objectMap.setTile(tx, ty, 0);
+						var light:Light = cast(_lights.recycle(Light), Light);
+						light.init(tx * TILE_WIDTH + TILE_HALF_WIDTH, ty * TILE_HEIGHT + TILE_HALF_HEIGHT, 1, _darkness);
 					default:
 						//trace('Unknown tile: ', tileValue);
 				}
@@ -267,6 +314,8 @@ class PlayState extends FlxState
 	{
 		if (Std.is(sprite1, Bullet) || Std.is(sprite1, EnemyBullet)) 
 		{
+			var hitSound:String = (FlxRandom.chanceRoll()) ? 'Hit1' : 'Hit2';
+			FlxG.play(hitSound, 0.5);
 			sprite1.kill();
 		}
 		

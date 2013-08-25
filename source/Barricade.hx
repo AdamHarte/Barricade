@@ -1,6 +1,7 @@
 package;
 
 import flash.Lib;
+import openfl.Assets;
 import org.flixel.FlxGame;
 
 /**
@@ -20,6 +21,9 @@ class Barricade extends FlxGame
 		var ratioY:Float = stageHeight / (480 / zoomLevel);
 		var ratio:Float = Math.min(ratioX, ratioY);
 		super(Math.ceil(stageWidth / ratio), Math.ceil(stageHeight / ratio), MenuState, ratio, 60, 60);
+		
+		var gameHud:GameHUD = new GameHUD();
+		Reg.gameHud = gameHud;
 	}
 	
 	private function loadLevels() 

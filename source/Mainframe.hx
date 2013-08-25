@@ -83,6 +83,7 @@ class Mainframe extends FlxSprite
 		flicker(0);
 		exists = true;
 		play('dead');
+		FlxG.play('Explosion', 0.8);
 		
 		_gibs.at(this);
 		_gibs.start(true, 3, 0, 20);

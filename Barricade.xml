@@ -13,30 +13,58 @@
 	
 	<assets path="assets" if="android" >
 		<sound path="data/beep.wav" id="Beep" />
-		
-		<!-- Your sound embedding code here... -->
-		
+		<sound path="sounds/explosion.wav" id="Explosion" />
+		<sound path="sounds/jump.wav" id="Jump" />
+		<sound path="sounds/shoot.wav" id="Shoot" />
+		<sound path="sounds/shoot_slow.wav" id="ShootSlow" />
+		<sound path="sounds/shoot_big.wav" id="ShootBig" />
+		<sound path="sounds/enemy_shoot.wav" id="EnemyShoot" />
+		<sound path="sounds/shutdown.wav" id="Shutdown" />
+		<sound path="sounds/bootup.wav" id="Bootup" />
+		<sound path="sounds/hit1.wav" id="Hit1" />
+		<sound path="sounds/hit2.wav" id="Hit2" />
 	</assets>
 	
 	<assets path="assets" if="desktop" >
 		<sound path="data/beep.wav" id="Beep" />
-		
-		<!-- Your sound embedding code here... -->
-		
+		<sound path="sounds/explosion.wav" id="Explosion" />
+		<sound path="sounds/jump.wav" id="Jump" />
+		<sound path="sounds/shoot.wav" id="Shoot" />
+		<sound path="sounds/shoot_slow.wav" id="ShootSlow" />
+		<sound path="sounds/shoot_big.wav" id="ShootBig" />
+		<sound path="sounds/enemy_shoot.wav" id="EnemyShoot" />
+		<sound path="sounds/shutdown.wav" id="Shutdown" />
+		<sound path="sounds/bootup.wav" id="Bootup" />
+		<sound path="sounds/hit1.wav" id="Hit1" />
+		<sound path="sounds/hit2.wav" id="Hit2" />
 	</assets>
 	
 	<assets path="assets" if="flash" >
 		<sound path="data/beep.mp3" id="Beep" />
-		
-		<!-- Your sound embedding code here... -->
-		
+		<sound path="sounds/explosion.mp3" id="Explosion" />
+		<sound path="sounds/jump.mp3" id="Jump" />
+		<sound path="sounds/shoot.mp3" id="Shoot" />
+		<sound path="sounds/shoot_slow.mp3" id="ShootSlow" />
+		<sound path="sounds/shoot_big.mp3" id="ShootBig" />
+		<sound path="sounds/enemy_shoot.mp3" id="EnemyShoot" />
+		<sound path="sounds/shutdown.mp3" id="Shutdown" />
+		<sound path="sounds/bootup.mp3" id="Bootup" />
+		<sound path="sounds/hit1.mp3" id="Hit1" />
+		<sound path="sounds/hit2.mp3" id="Hit2" />
 	</assets>
 	
 	<assets path="assets" if="html5" >
 		<sound path="data/beep.mp3" id="Beep" />
-		
-		<!-- Your sound embedding code here... -->
-		
+		<sound path="sounds/explosion.mp3" id="Explosion" />
+		<sound path="sounds/jump.mp3" id="Jump" />
+		<sound path="sounds/shoot.mp3" id="Shoot" />
+		<sound path="sounds/shoot_slow.mp3" id="ShootSlow" />
+		<sound path="sounds/shoot_big.mp3" id="ShootBig" />
+		<sound path="sounds/enemy_shoot.mp3" id="EnemyShoot" />
+		<sound path="sounds/shutdown.mp3" id="Shutdown" />
+		<sound path="sounds/bootup.mp3" id="Bootup" />
+		<sound path="sounds/hit1.mp3" id="Hit1" />
+		<sound path="sounds/hit2.mp3" id="Hit2" />
 	</assets>
 	
 	<assets path="assets" exclude="*.wav|*.bak|*.dam" if="flash" />

@@ -1,6 +1,8 @@
 package;
 
 import flash.display.BitmapData;
+import flash.display.Sprite;
+import flash.text.Font;
 import openfl.Assets;
 import org.flixel.FlxSave;
 import org.flixel.FlxTilemap;
@@ -17,6 +19,11 @@ class Reg
 {
 	static public var tileMap:FlxTilemap;
 	static public var objectMap:FlxTilemap;
+	
+	static public var gameHud:GameHUD;
+	
+	static public var shutdownTimer:Float;
+	static public var isShutdown:Bool = false;
 	
 	/**
 	 * Generic levels Array that can be used for cross-state stuff.

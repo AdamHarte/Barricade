@@ -15,10 +15,10 @@ import org.flixel.util.FlxPoint;
 class Player extends FlxSprite
 {
 	private static var MAX_HEALTH:Int = 10;
+	private static var _jumpPower:Int = 150; //200 //TODO: Find a good jump power value.
 	
 	public var playerMidPoint:FlxPoint;
 	
-	private var _jumpPower:Int;
 	private var _bullets:FlxGroup;
 	private var _gibs:FlxEmitter;
 	private var _restart:Float;
@@ -44,7 +44,6 @@ class Player extends FlxSprite
 		var runSpeed:Int = 80;
 		drag.x = runSpeed * 8;
 		acceleration.y = 420;
-		_jumpPower = 200; //TODO: Find a good jump power value.
 		maxVelocity.x = runSpeed;
 		maxVelocity.y = _jumpPower;
 		
@@ -96,6 +95,7 @@ class Player extends FlxSprite
 		if (velocity.y == 0 && (FlxG.keys.justPressed('W') || FlxG.keys.justPressed('SPACE'))) 
 		{
 			velocity.y = -_jumpPower;
+			FlxG.play('Jump', 0.5);
 			play('jump');
 		}
 		
@@ -116,22 +116,27 @@ class Player extends FlxSprite
 		// Shoot
 		if (FlxG.mouse.justPressed()) 
 		{
+			playShootSound();
 			cast(_bullets.recycle(Bullet), Bullet).shootPrecise(playerMidPoint, FlxAngle.angleBetweenMouse(this));
 		}
 		else if (FlxG.keys.justPressed('LEFT')) 
 		{
+			playShootSound();
 			cast(_bullets.recycle(Bullet), Bullet).shoot(playerMidPoint, FlxObject.LEFT);
 		}
 		else if (FlxG.keys.justPressed('RIGHT')) 
 		{
+			playShootSound();
 			cast(_bullets.recycle(Bullet), Bullet).shoot(playerMidPoint, FlxObject.RIGHT);
 		}
 		else if (FlxG.keys.justPressed('UP')) 
 		{
+			playShootSound();
 			cast(_bullets.recycle(Bullet), Bullet).shoot(playerMidPoint, FlxObject.UP);
 		}
 		else if (FlxG.keys.justPressed('DOWN')) 
 		{
+			playShootSound();
 			cast(_bullets.recycle(Bullet), Bullet).shoot(playerMidPoint, FlxObject.DOWN);
 		}
 		
@@ -156,6 +161,7 @@ class Player extends FlxSprite
 		super.kill();
 		
 		flicker(0);
+		FlxG.play('Explosion', 0.6);
 		exists = true;
 		visible = false;
 		velocity.make();
@@ -180,6 +186,18 @@ class Player extends FlxSprite
 		visible = true;
 		health = MAX_HEALTH;
 		flicker(1);
+	}
+	
+	private function playShootSound() 
+	{
+		if (FlxG.timeScale < 0.7) 
+		{
+			FlxG.play('ShootSlow', 0.5);
+		}
+		else 
+		{
+			FlxG.play('Shoot', 0.5);
+		}
 	}
 	
 }

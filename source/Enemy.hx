@@ -66,7 +66,7 @@ class Enemy extends FlxSprite
 		reset(xPos - width / 2, yPos - height / 2);
 		health = 2;
 		isShutdown = false;
-		_aggression = 100;// FlxRandom.intRanged(2, 4);
+		_aggression = FlxRandom.intRanged(2, 4);
 		_jumpTimer = 0;
 		_wakeTimer = 0;
 		_shootTimer = 0;
@@ -170,6 +170,8 @@ class Enemy extends FlxSprite
 		
 		super.kill();
 		
+		FlxG.play('Explosion', 0.5);
+		
 		flicker(0);
 		_gibs.at(this);
 		_gibs.start(true, 3, 0, 20);
@@ -193,6 +195,7 @@ class Enemy extends FlxSprite
 	
 	private function shoot() 
 	{
+		FlxG.play('EnemyShoot', 0.3);
 		_shootTimer = _reloadTime;
 		var bullet:EnemyBullet = cast(_bullets.recycle(EnemyBullet), EnemyBullet);
 		bullet.shoot(getMidpoint(), FlxObject.LEFT);
