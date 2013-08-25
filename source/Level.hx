@@ -1,4 +1,6 @@
 package ;
+import openfl.Assets;
+import org.flixel.util.FlxPoint;
 
 /**
  * ...
@@ -11,11 +13,12 @@ class Level
 	public var objData:String;
 	
 	
-	public function new(levelName:String, data:String, objData:String) 
+	public function new(levelName:String, fileName:String) 
 	{
 		this.levelName = levelName;
-		this.data = data;
-		this.objData = objData;
+		data = Assets.getText('assets/levels/' + fileName + '.csv');
+		objData = Assets.getText('assets/levels/' + fileName + '_objs.csv');
+		
 	}
 	
 }

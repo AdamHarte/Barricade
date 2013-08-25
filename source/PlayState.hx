@@ -26,6 +26,7 @@ class PlayState extends FlxState
 	private var _tileMap:FlxTilemap;
 	private var _objectMap:FlxTilemap;
 	private var _player:Player;
+	private var _mainframe:Mainframe;
 	private var _enemies:FlxGroup;
 	private var _bullets:FlxGroup;
 	private var _enemyBullets:FlxGroup;
@@ -50,11 +51,10 @@ class PlayState extends FlxState
 	{
 		FlxG.bgColor = 0xff1e2936;
 		
-		// Generate levels.
-		Reg.addLevel('Main Entry', '01');
-		
 		_playerSpawn = new FlxPoint();
 		_spawnPoint = new FlxPoint();
+		
+		_mainframe = new Mainframe();
 		
 		var _bg = new FlxSprite(0, 0, 'assets/bg.png');
 		_bg.scale.make(4.0, 4.0);
@@ -79,6 +79,7 @@ class PlayState extends FlxState
 		add(_bg);
 		add(_tileMap);
 		add(_objectMap);
+		add(_mainframe);
 		add(_player);
 		add(_enemies);
 		add(_bullets);
@@ -91,6 +92,7 @@ class PlayState extends FlxState
 		_objects = new FlxGroup();
 		_objects.add(_player);
 		_objects.add(_enemies);
+		_objects.add(_mainframe);
 		_objects.add(_bullets);
 		_objects.add(_enemyBullets);
 		
@@ -109,11 +111,15 @@ class PlayState extends FlxState
 		
 		_player = null;
 		_enemies = null;
+		_mainframe = null;
 		_bullets = null;
 		_enemyBullets = null;
 		
 		_hazards = null;
 		_objects = null;
+		
+		_tileMap = null;
+		_objectMap = null;
 		
 	}
 	
@@ -121,6 +127,7 @@ class PlayState extends FlxState
 	{
 		FlxG.collide(_tileMap, _objects);
 		FlxG.overlap(_hazards, _player, overlapHandler);
+		FlxG.overlap(_hazards, _mainframe, overlapHandler);
 		FlxG.overlap(_bullets, _hazards, overlapHandler);
 		
 		if (FlxRandom.chanceRoll(2)) 
@@ -156,8 +163,8 @@ class PlayState extends FlxState
 						_objectMap.setTile(tx, ty, 0);
 						_playerSpawn.make(tx * TILE_WIDTH + (TILE_WIDTH / 2), ty * TILE_HEIGHT + (TILE_WIDTH / 2));
 					case 2: // Mainframe
-						//TODO: Turn the tile off, and use an animated sprite instead.
-						//_objectMap.setTile(tx, ty, 0);
+						_objectMap.setTile(tx, ty, 0);
+						_mainframe.init(tx * TILE_WIDTH + (TILE_WIDTH / 2), ty * TILE_HEIGHT + (TILE_WIDTH / 2));
 					case 4: // Spawner
 						_spawnPoint.make(tx * TILE_WIDTH + (TILE_WIDTH / 2), ty * TILE_HEIGHT + (TILE_WIDTH / 2));
 					default:
@@ -177,14 +184,7 @@ class PlayState extends FlxState
 		{
 			sprite1.kill();
 		}
-		if (Std.is(sprite2, Player)) 
-		{
-			if (!sprite2.flickering) 
-			{
-				sprite2.hurt(1);
-			}
-		}
-		else 
+		if (!sprite2.flickering) 
 		{
 			sprite2.hurt(1);
 		}

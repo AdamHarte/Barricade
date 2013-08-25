@@ -149,6 +149,7 @@ class Player extends FlxSprite
 		}
 		
 		super.kill();
+		
 		flicker(0);
 		exists = true;
 		visible = false;
