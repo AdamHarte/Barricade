@@ -34,6 +34,9 @@ class MenuState extends FlxState
 		FlxG.mouse.show();
 		#end
 		
+		Reg.level = 0;
+		Reg.score = 0;
+		
 		_titleImg = new FlxSprite(0, 0, 'assets/title_screen.png');
 		_titleImg.origin.make();
 		_titleImg.scale.make(2, 2);
@@ -46,8 +49,8 @@ class MenuState extends FlxState
 		add(title);*/
 		
 		var credits:FlxText = new FlxText(0, 0, 256, 'by Adam Harte');
-		credits.x = (FlxG.width - credits.width) - 1;
-		credits.y = (FlxG.height - credits.height) - 1;
+		credits.x = (FlxG.width - credits.width) - 40;
+		credits.y = 46; // (FlxG.height - credits.height) - 1;
 		credits.setFormat(null, 8, 0x0e354b, 'right');
 		credits.antialiasing = true;
 		add(credits);

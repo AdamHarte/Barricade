@@ -10,10 +10,14 @@ import org.flixel.FlxText;
  */
 class WinState extends FlxState
 {
-
+	private var _finishTimer:Float;
+	
+	
 	override public function create():Void 
 	{
-		FlxG.flash(0xff000000, 1);
+		_finishTimer = 0;
+		
+		Reg.scores.push(Reg.score);
 		
 		var winText:FlxText = new FlxText(0, FlxG.height / 3, 256, 'YOU WIN!');
 		winText.x = (FlxG.width - winText.width) / 2;
@@ -21,7 +25,24 @@ class WinState extends FlxState
 		winText.antialiasing = true;
 		add(winText);
 		
+		var scoreText:FlxText = new FlxText(0, FlxG.height * 0.75, 256, 'Your score: ' + Std.string(Reg.score));
+		scoreText.x = (FlxG.width - scoreText.width) / 2;
+		scoreText.setFormat(null, 12, 0x31a2ee, 'center');
+		scoreText.antialiasing = true;
+		add(scoreText);
+		
+		FlxG.flash(0xff000000, 1);
+		
 		super.create();
+	}
+	
+	override public function update():Void
+	{
+		_finishTimer += FlxG.elapsed;
+		if (_finishTimer > 5) 
+		{
+			FlxG.switchState(new MenuState());
+		}
 	}
 	
 }
