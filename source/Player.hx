@@ -160,14 +160,11 @@ class Player extends FlxSprite
 		velocity.make();
 		acceleration.x = 0;
 		
+		_gibs.at(this);
+		_gibs.start(true, 5, 0, 35);
+		
 		FlxG.camera.shake(0.05, 0.4);
 		//FlxG.camera.flash(0xffd8eba2, 0.35);
-		
-		if (_gibs != null) 
-		{
-			_gibs.at(this);
-			_gibs.start(true, 5, 0, 35);
-		}
 	}
 	
 	

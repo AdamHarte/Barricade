@@ -1,5 +1,6 @@
 package ;
 
+import org.flixel.FlxEmitter;
 import org.flixel.FlxG;
 import org.flixel.FlxSprite;
 
@@ -9,6 +10,7 @@ import org.flixel.FlxSprite;
  */
 class Mainframe extends FlxSprite
 {
+	private var _gibs:FlxEmitter;
 	private var _restart:Float;
 	
 	
@@ -29,8 +31,9 @@ class Mainframe extends FlxSprite
 		addAnimation('dead', [3, 4, 5, 6], 6);
 	}
 	
-	public function init(xPos:Float, yPos:Float):Void 
+	public function init(xPos:Float, yPos:Float, gibs:FlxEmitter):Void 
 	{
+		_gibs = gibs;
 		reset(xPos - width / 2, yPos - height / 2);
 		health = 5;
 		play('idle');
@@ -39,6 +42,8 @@ class Mainframe extends FlxSprite
 	override public function destroy():Void 
 	{
 		super.destroy();
+		
+		_gibs = null;
 	}
 	
 	override public function update():Void 
@@ -78,6 +83,9 @@ class Mainframe extends FlxSprite
 		flicker(0);
 		exists = true;
 		play('dead');
+		
+		_gibs.at(this);
+		_gibs.start(true, 3, 0, 20);
 		
 		//Reg.score -= 100;
 		

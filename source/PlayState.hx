@@ -137,6 +137,8 @@ class PlayState extends FlxState
 		FlxG.watch(_player, 'health', 'Player health');
 		
 		super.create();
+		
+		FlxG.flash(0xff000000, 1);
 	}
 	
 	override public function destroy():Void
@@ -214,7 +216,7 @@ class PlayState extends FlxState
 						_playerSpawn.make(tx * TILE_WIDTH + TILE_HALF_WIDTH, ty * TILE_HEIGHT + TILE_HALF_HEIGHT);
 					case 2: // Mainframe
 						_objectMap.setTile(tx, ty, 0);
-						_mainframe.init(tx * TILE_WIDTH + TILE_HALF_WIDTH, ty * TILE_HEIGHT + TILE_HALF_HEIGHT);
+						_mainframe.init(tx * TILE_WIDTH + TILE_HALF_WIDTH, ty * TILE_HEIGHT + TILE_HALF_HEIGHT, _robotGibs);
 					case 4: // Spawner
 						_spawnPoint.make(tx * TILE_WIDTH + TILE_HALF_WIDTH, ty * TILE_HEIGHT + TILE_HALF_HEIGHT);
 					default:
