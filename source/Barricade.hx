@@ -28,9 +28,15 @@ class Barricade extends FlxGame
 	
 	private function loadLevels() 
 	{
-		Reg.addLevel('Main Entry', '01', 20);
-		Reg.addLevel('Tunnel Entry', '02', 40);
-		Reg.addLevel('Tunnel Entry', '03', 60);
+		Reg.addLevel('Main Entry', 		'01', 20);
+		Reg.addLevel('Main Entry 2', 	'02', 40);
+		Reg.addLevel('Small caves',		'03', 60);
+		Reg.addLevel('Triple', 			'04', 70);
+		Reg.addLevel('Waterfall', 		'05', 60);
+		
+		
+		//Reg.addLevel('Tunnel Entry', '02', 40);
+		//Reg.addLevel('Tunnel Entry', '03', 60);
 		
 	}
 }

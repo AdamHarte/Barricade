@@ -24,7 +24,7 @@ class Bullet extends FlxSprite
 		width = 7;
 		height = 2;
 		offset.x = 1;
-		offset.y = 2;
+		offset.y = 4;
 		
 		addAnimation('up', [0]);
 		addAnimation('down', [1]);

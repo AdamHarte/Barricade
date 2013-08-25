@@ -12,8 +12,10 @@ import org.flixel.FlxObject;
 import org.flixel.FlxSprite;
 import org.flixel.FlxState;
 import org.flixel.FlxTilemap;
+import org.flixel.plugin.photonstorm.FlxDelay;
 import org.flixel.util.FlxPoint;
 import org.flixel.util.FlxRandom;
+import org.flixel.util.FlxTimer;
 
 /**
  * ...
@@ -21,11 +23,11 @@ import org.flixel.util.FlxRandom;
  */
 class PlayState extends FlxState
 {
-	static private var TILE_WIDTH:Int = 8;
-	static private var TILE_HEIGHT:Int = 8;
-	static private var TILE_HALF_WIDTH:Int = 4;
-	static private var TILE_HALF_HEIGHT:Int = 4;
-	static private var SHUTDOWN_TIME_LIMIT:Float = 10;
+	static public var TILE_WIDTH:Int = 8;
+	static public var TILE_HEIGHT:Int = 8;
+	static public var TILE_HALF_WIDTH:Int = 4;
+	static public var TILE_HALF_HEIGHT:Int = 4;
+	static public var SHUTDOWN_TIME_LIMIT:Float = 10;
 	
 	private var levelTilesPath:String;
 	private var levelObjectsPath:String;
@@ -207,7 +209,7 @@ class PlayState extends FlxState
 		// Check win conditions. Killed all enemies, and not bullets still in the air, and the mainframe is still alive.
 		if (Reg.enemiesKilled == Reg.currentLevel.enemyCount && _enemyBullets.countLiving() == 0 && _mainframe.alive) 
 		{
-			FlxG.fade(0xff000000, 1, false, winLevelFadeHandler);
+			finishedLevel();
 		}
 		
 		Reg.shutdownTimer += FlxG.elapsed;
@@ -231,6 +233,7 @@ class PlayState extends FlxState
 		
 		FlxG.collide(_tileMap, _objects);
 		FlxG.collide(_walls, _enemies);
+		FlxG.collide(_mainframe, _enemies, enemyAtMainframe);
 		FlxG.overlap(_hazards, _player, overlapHandler);
 		FlxG.overlap(_hazards, _playerStructures, overlapHandler);
 		FlxG.overlap(_bullets, _hazards, overlapHandler);
@@ -337,6 +340,27 @@ class PlayState extends FlxState
 				sprite2.hurt(1);
 			}
 		}
+	}
+	
+	private function enemyAtMainframe(sprite1:FlxObject, sprite2:FlxObject) 
+	{
+		if (/*Std.is(sprite1, Mainframe) &&*/ Std.is(sprite2, Enemy)) 
+		{
+			//var mainframe:Mainframe = cast(sprite1, Mainframe);
+			var enemy:Enemy = cast(sprite2, Enemy);
+			enemy.atMainframe = true;
+		}
+	}
+	
+	private function finishedLevel():Void 
+	{
+		var timer:FlxTimer = new FlxTimer();
+		timer.start(1, 1, gotoNextLevel);
+	}
+	
+	private function gotoNextLevel(timer:FlxTimer):Void 
+	{
+		FlxG.fade(0xff000000, 1, false, winLevelFadeHandler);
 	}
 	
 	private function winLevelFadeHandler():Void 

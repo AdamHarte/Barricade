@@ -25,6 +25,7 @@ class Mainframe extends FlxSprite
 		height = 7;
 		offset.x = 1;
 		offset.y = 0;
+		immovable = true;
 		
 		// Setup animations.
 		addAnimation('idle', [1, 2], 2);
@@ -65,7 +66,7 @@ class Mainframe extends FlxSprite
 	override public function hurt(damage:Float):Void 
 	{
 		//play('hit');
-		flicker(0.6);
+		flicker(0.4);
 		Reg.score -= 20;
 		
 		super.hurt(damage);

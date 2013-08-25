@@ -7,6 +7,7 @@ import org.flixel.FlxGroup;
 import org.flixel.FlxObject;
 import org.flixel.FlxSprite;
 import org.flixel.util.FlxMath;
+import org.flixel.util.FlxPoint;
 import org.flixel.util.FlxRandom;
 
 /**
@@ -15,16 +16,18 @@ import org.flixel.util.FlxRandom;
  */
 class Enemy extends FlxSprite
 {
-	private static var _reloadTime:Float = 2;
-	private static var _jumpPower:Int = 110;
-	
 	public var isShutdown:Bool;
+	public var atMainframe:Bool;
 	
+	private var _reloadTime:Float;
+	private var _jumpPower:Int;
+	private var _walkSpeed:Int;
 	private var _player:Player;
 	private var _bullets:FlxGroup;
 	private var _gibs:FlxEmitter;
 	private var _mainframe:Mainframe;
 	private var _jumpTimer:Float;
+	private var _jumpTimerLimit:Float;
 	private var _wakeTimer:Float;
 	private var _shootTimer:Float;
 	private var _aggression:Int;
@@ -40,10 +43,14 @@ class Enemy extends FlxSprite
 		offset.x = 1;
 		offset.y = 1;
 		
-		var walkSpeed:Int = FlxRandom.intRanged(25, 35);
-		drag.x = walkSpeed * 8;
+		_reloadTime = 2.0;
+		_jumpPower = 110;
+		_walkSpeed = FlxRandom.intRanged(25, 35) + (Reg.level * 1);
+		_jumpTimerLimit = Math.max(2.0 - (Reg.level * 0.05), 0.1);
+		
+		drag.x = _walkSpeed * 8;
 		acceleration.y = 420;
-		maxVelocity.x = walkSpeed;
+		maxVelocity.x = _walkSpeed;
 		maxVelocity.y = _jumpPower;
 		
 		// Setup animations.
@@ -65,6 +72,7 @@ class Enemy extends FlxSprite
 		
 		reset(xPos - width / 2, yPos - height / 2);
 		health = 2;
+		atMainframe = false;
 		isShutdown = false;
 		_aggression = FlxRandom.intRanged(2, 4);
 		_jumpTimer = 0;
@@ -108,14 +116,30 @@ class Enemy extends FlxSprite
 				acceleration.x -= drag.x;
 			}
 			
-			if (velocity.y == 0 && isTouching(FlxObject.LEFT)) 
+			if (!atMainframe && velocity.y == 0) 
 			{
-				_jumpTimer += FlxG.elapsed;
-				if (_jumpTimer > 2) 
+				if (isTouching(FlxObject.LEFT)) // blocked by anything but the mainframe.
 				{
-					velocity.y = -_jumpPower;
-					play('jump');
-					_jumpTimer = 0;
+					_jumpTimer += FlxG.elapsed;
+					if (_jumpTimer > _jumpTimerLimit) 
+					{
+						velocity.y = -_jumpPower;
+						play('jump');
+						_jumpTimer = 0;
+					}
+				}
+				else if (isTouching(FlxObject.FLOOR))
+				{
+					//Detect if walking off edge, and randomly decide to jump.
+					var tx:Int = Math.round(x / PlayState.TILE_WIDTH);
+					var ty:Int = Math.round(y / PlayState.TILE_HEIGHT);
+					var tile:Int = Reg.tileMap.getTile(tx - 1, ty + 1);
+					var chance:Int = 5; // Math.round(1 + );
+					if (tile == 0 && FlxRandom.chanceRoll(chance)) 
+					{
+						velocity.y = -_jumpPower;
+						play('jump');
+					}
 				}
 			}
 			else

@@ -78,6 +78,10 @@ class Player extends FlxSprite
 		
 		getMidpoint(playerMidPoint);
 		
+		//var tx:Int = Math.round(x / PlayState.TILE_WIDTH);
+		//var ty:Int = Math.round(y / PlayState.TILE_HEIGHT);
+		//trace(tx, ty);
+		
 		// Movement
 		acceleration.x = 0;
 		if(FlxG.keys.A)
