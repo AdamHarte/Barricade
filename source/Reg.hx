@@ -47,11 +47,23 @@ class Reg
 	 */
 	static public var save:FlxSave;
 	
+	static public var currentLevel(get, never):Level;
+	
+	static public var enemiesToSpawn:Int = 0;
+	static public var enemiesKilled:Int = 0;
 	
 	
-	static public function addLevel(levelName:String, fileName:String):Void 
+	
+	static private function get_currentLevel():Level 
 	{
-		var level:Level = new Level(levelName, fileName);
+		return Reg.levels[Reg.level];
+	}
+	
+	
+	
+	static public function addLevel(levelName:String, fileName:String, enemyCount:Int):Void 
+	{
+		var level:Level = new Level(levelName, fileName, enemyCount);
 		Reg.levels.push(level);
 	}
 }

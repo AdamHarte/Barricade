@@ -64,6 +64,9 @@ class PlayState extends FlxState
 	{
 		FlxG.bgColor = 0xff1e2936;
 		
+		Reg.enemiesKilled = 0;
+		Reg.enemiesToSpawn = Reg.currentLevel.enemyCount;
+		
 		_playerSpawn = new FlxPoint();
 		_spawnPoint = new FlxPoint();
 		
@@ -147,6 +150,7 @@ class PlayState extends FlxState
 		//FlxG.camera.zoom = 4;
 		
 		FlxG.watch(_player, 'health', 'Player health');
+		FlxG.watch(Reg, 'enemiesToSpawn', 'enemiesToSpawn');
 		
 		super.create();
 		
@@ -177,6 +181,12 @@ class PlayState extends FlxState
 	
 	override public function update():Void
 	{
+		// Check win conditions. Killed all enemies, and not bullets still in the air, and the mainframe is still alive.
+		if (Reg.enemiesKilled == Reg.currentLevel.enemyCount && _enemyBullets.countLiving() == 0 && _mainframe.alive) 
+		{
+			FlxG.fade(0xff000000, 1, false, winLevelFadeHandler);
+		}
+		
 		_shutdownTimer += FlxG.elapsed;
 		if (_shutdownTimer > SHUTDOWN_TIME_LIMIT) 
 		{
@@ -198,25 +208,29 @@ class PlayState extends FlxState
 		FlxG.overlap(_hazards, _playerStructures, overlapHandler);
 		FlxG.overlap(_bullets, _hazards, overlapHandler);
 		
-		if (!_isShutdown && FlxRandom.chanceRoll(2)) 
+		if (Reg.enemiesToSpawn > 0 && !_isShutdown && FlxRandom.chanceRoll(2)) 
 		{
-			var enemy:Enemy = cast(_enemies.recycle(Enemy), Enemy);
-			enemy.init(_spawnPoint.x, _spawnPoint.y, _enemyBullets, _player, _robotGibs);
+			spawnEnemy();
 		}
 		
 		super.update();
+	}
+	
+	private function spawnEnemy() 
+	{
+		Reg.enemiesToSpawn--;
+		var enemy:Enemy = cast(_enemies.recycle(Enemy), Enemy);
+		enemy.init(_spawnPoint.x, _spawnPoint.y, _enemyBullets, _player, _robotGibs);
 	}
 	
 	
 	
 	private function buildLevel() 
 	{
-		var currentLevel:Level = Reg.levels[Reg.level];
-		
-		_tileMap.loadMap(currentLevel.data, levelTilesPath, TILE_WIDTH, TILE_HEIGHT, FlxTilemap.AUTO);
+		_tileMap.loadMap(Reg.currentLevel.data, levelTilesPath, TILE_WIDTH, TILE_HEIGHT, FlxTilemap.AUTO);
 		
 		// Place other objects
-		_objectMap.loadMap(currentLevel.objData, levelObjectsPath, TILE_WIDTH, TILE_HEIGHT);
+		_objectMap.loadMap(Reg.currentLevel.objData, levelObjectsPath, TILE_WIDTH, TILE_HEIGHT);
 		for (ty in 0..._objectMap.heightInTiles) 
 		{
 			for (tx in 0..._objectMap.widthInTiles) 
@@ -232,9 +246,9 @@ class PlayState extends FlxState
 					case 2: // Mainframe
 						_objectMap.setTile(tx, ty, 0);
 						_mainframe.init(tx * TILE_WIDTH + TILE_HALF_WIDTH, ty * TILE_HEIGHT + TILE_HALF_HEIGHT, _robotGibs);
-					case 4: // Spawner
+					case 3: // Spawner
 						_spawnPoint.make(tx * TILE_WIDTH + TILE_HALF_WIDTH, ty * TILE_HEIGHT + TILE_HALF_HEIGHT);
-					case 5: // Wall
+					case 4: // Wall
 						_objectMap.setTile(tx, ty, 0);
 						var wall:Wall = cast(_walls.recycle(Wall), Wall);
 						wall.init(tx * TILE_WIDTH + TILE_HALF_WIDTH, ty * TILE_HEIGHT + TILE_HALF_HEIGHT, _robotGibs);
@@ -271,6 +285,20 @@ class PlayState extends FlxState
 			{
 				sprite2.hurt(1);
 			}
+		}
+	}
+	
+	private function winLevelFadeHandler():Void 
+	{
+		if (Reg.level == Reg.levels.length - 1) 
+		{
+			// Beat the last level.
+			FlxG.switchState(new WinState());
+		}
+		else 
+		{
+			Reg.level++;
+			FlxG.resetState();
 		}
 	}
 	

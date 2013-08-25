@@ -48,7 +48,7 @@ class MenuState extends FlxState
 		FlxG.flash(0xff31a2ee, 0.4);
 		
 		
-		//TEMP: go straigt to the play state.
+		//TEMP: go straight to the play state.
 		FlxG.switchState(new PlayState());
 		
 		super.create();

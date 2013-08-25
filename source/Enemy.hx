@@ -154,6 +154,7 @@ class Enemy extends FlxSprite
 		_gibs.at(this);
 		_gibs.start(true, 3, 0, 20);
 		Reg.score += 100;
+		Reg.enemiesKilled++;
 	}
 	
 	public function shutdown():Void 
