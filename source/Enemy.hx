@@ -1,5 +1,6 @@
 package ;
 
+import org.flixel.FlxEmitter;
 import org.flixel.FlxG;
 import org.flixel.FlxGroup;
 import org.flixel.FlxObject;
@@ -15,14 +16,19 @@ class Enemy extends FlxSprite
 	private var _jumpPower:Int;
 	private var _player:Player;
 	private var _bullets:FlxGroup;
+	private var _gibs:FlxEmitter;
 	private var _jumpTimer:Float;
+	private var _wakeTimer:Float;
+	private var _isShutdown:Bool;
 	
 	
 	public function new() 
 	{
 		super();
 		
+		_isShutdown = false;
 		_jumpTimer = 0;
+		_wakeTimer = 0;
 		
 		loadGraphic('assets/bot_walker.png', true, true, 8, 8);
 		width = 6;
@@ -30,7 +36,7 @@ class Enemy extends FlxSprite
 		offset.x = 1;
 		offset.y = 1;
 		
-		var walkSpeed:Int = 30;
+		var walkSpeed:Int = FlxRandom.intRanged(25, 35);
 		drag.x = walkSpeed * 8;
 		acceleration.y = 420;
 		_jumpPower = 110;
@@ -47,14 +53,14 @@ class Enemy extends FlxSprite
 		
 	}
 	
-	public function init(xPos:Float, yPos:Float, bullets:FlxGroup, player:Player):Void 
+	public function init(xPos:Float, yPos:Float, bullets:FlxGroup, player:Player, gibs:FlxEmitter):Void 
 	{
 		_player = player;
 		_bullets = bullets;
+		_gibs = gibs;
 		
 		reset(xPos - width / 2, yPos - height / 2);
 		health = 2;
-		
 		
 	}
 	
@@ -64,50 +70,62 @@ class Enemy extends FlxSprite
 		
 		_player = null;
 		_bullets = null;
+		_gibs = null;
 	}
 	
 	override public function update():Void 
 	{
 		acceleration.x = 0;
 		
-		if (!flickering) 
+		var isAwake:Bool = false;
+		if (!_isShutdown) 
 		{
-			if (velocity.y == 0) 
+			_wakeTimer += FlxG.elapsed;
+			if (_wakeTimer > 0.6) 
 			{
-				play('walk');
+				isAwake = true;
 			}
-			acceleration.x -= drag.x;
 		}
 		
-		if (velocity.y == 0 && isTouching(FlxObject.LEFT)) 
+		if (isAwake) 
 		{
-			_jumpTimer += FlxG.elapsed;
-			if (_jumpTimer > 2) 
+			if (!flickering) 
 			{
-				velocity.y = -_jumpPower;
-				play('jump');
+				if (velocity.y == 0) 
+				{
+					play('walk');
+				}
+				acceleration.x -= drag.x;
+			}
+			
+			if (velocity.y == 0 && isTouching(FlxObject.LEFT)) 
+			{
+				_jumpTimer += FlxG.elapsed;
+				if (_jumpTimer > 2) 
+				{
+					velocity.y = -_jumpPower;
+					play('jump');
+					_jumpTimer = 0;
+				}
+			}
+			else
+			{
 				_jumpTimer = 0;
 			}
-		}
-		else
-		{
-			_jumpTimer = 0;
-		}
-		
-		if (velocity.x > 0) 
-		{
-			facing = FlxObject.RIGHT;
-		}
-		else if (velocity.x < 0)
-		{
-			facing = FlxObject.LEFT;
-		}
-		
-		
-		if (FlxRandom.chanceRoll(2)) 
-		{
-			var bullet:EnemyBullet = cast(_bullets.recycle(EnemyBullet), EnemyBullet);
-			bullet.shoot(getMidpoint(_point), FlxObject.LEFT);
+			
+			if (velocity.x > 0) 
+			{
+				facing = FlxObject.RIGHT;
+			}
+			else if (velocity.x < 0)
+			{
+				facing = FlxObject.LEFT;
+			}
+			
+			if (FlxRandom.chanceRoll(2)) 
+			{
+				shoot();
+			}
 		}
 		
 		super.update();
@@ -132,7 +150,29 @@ class Enemy extends FlxSprite
 		super.kill();
 		
 		flicker(0);
+		_gibs.at(this);
+		_gibs.start(true, 3, 0, 20);
 		Reg.score += 100;
+	}
+	
+	public function shutdown():Void 
+	{
+		_isShutdown = true;
+		play('sleep');
+		
+	}
+	
+	public function bootup():Void 
+	{
+		_isShutdown = false;
+		_wakeTimer = 0;
+		play('wake');
+	}
+	
+	private function shoot() 
+	{
+		var bullet:EnemyBullet = cast(_bullets.recycle(EnemyBullet), EnemyBullet);
+		bullet.shoot(getMidpoint(_point), FlxObject.LEFT);
 	}
 	
 	

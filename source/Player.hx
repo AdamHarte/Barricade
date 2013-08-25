@@ -1,5 +1,6 @@
 package ;
 
+import org.flixel.FlxEmitter;
 import org.flixel.FlxG;
 import org.flixel.FlxGroup;
 import org.flixel.FlxObject;
@@ -17,16 +18,18 @@ class Player extends FlxSprite
 	
 	private var _jumpPower:Int;
 	private var _bullets:FlxGroup;
+	private var _gibs:FlxEmitter;
 	private var _restart:Float;
 	private var _spawnPoint:FlxPoint;
 	
 	
-	public function new(startX:Float, startY:Float, bullets:FlxGroup) 
+	public function new(startX:Float, startY:Float, bullets:FlxGroup, gibs:FlxEmitter) 
 	{
 		super(startX, startY);
 		
 		_spawnPoint = new FlxPoint(startX, startY);
 		_bullets = bullets;
+		_gibs = gibs;
 		_restart = 0;
 		
 		loadGraphic('assets/player.png', true, true, 8, 8);
@@ -55,6 +58,7 @@ class Player extends FlxSprite
 		super.destroy();
 		
 		_bullets = null;
+		_gibs = null;
 	}
 	
 	override public function update():Void
@@ -159,6 +163,11 @@ class Player extends FlxSprite
 		FlxG.camera.shake(0.05, 0.4);
 		//FlxG.camera.flash(0xffd8eba2, 0.35);
 		
+		if (_gibs != null) 
+		{
+			_gibs.at(this);
+			_gibs.start(true, 5, 0, 35);
+		}
 	}
 	
 	

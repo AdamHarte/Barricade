@@ -1,7 +1,9 @@
 package ;
 import flash.display.BitmapData;
 import openfl.Assets;
+import org.flixel.FlxAssets;
 import org.flixel.FlxCamera;
+import org.flixel.FlxEmitter;
 import org.flixel.FlxG;
 import org.flixel.FlxGroup;
 import org.flixel.FlxObject;
@@ -19,6 +21,9 @@ class PlayState extends FlxState
 {
 	static private var TILE_WIDTH:Int = 8;
 	static private var TILE_HEIGHT:Int = 8;
+	static private var TILE_HALF_WIDTH:Int = 4;
+	static private var TILE_HALF_HEIGHT:Int = 4;
+	static private var SHUTDOWN_TIME_LIMIT:Float = 10;
 	
 	private var levelTilesPath:String;
 	private var levelObjectsPath:String;
@@ -30,6 +35,8 @@ class PlayState extends FlxState
 	private var _enemies:FlxGroup;
 	private var _bullets:FlxGroup;
 	private var _enemyBullets:FlxGroup;
+	private var _playerGibs:FlxEmitter;
+	private var _robotGibs:FlxEmitter;
 	
 	// Collision groups
 	private var _hazards:FlxGroup;
@@ -37,12 +44,16 @@ class PlayState extends FlxState
 	
 	private var _playerSpawn:FlxPoint;
 	private var _spawnPoint:FlxPoint;
+	private var _shutdownTimer:Float;
+	private var _isShutdown:Bool;
 	
 	
 	public function new()
 	{
 		levelTilesPath = 'assets/level_tiles.png';
 		levelObjectsPath = 'assets/level_objects.png';
+		_shutdownTimer = 0;
+		_isShutdown = false;
 		
 		super();
 	}
@@ -53,6 +64,25 @@ class PlayState extends FlxState
 		
 		_playerSpawn = new FlxPoint();
 		_spawnPoint = new FlxPoint();
+		
+		// Gibs
+		_playerGibs = new FlxEmitter();
+		_playerGibs.setXSpeed(-150, 150);
+		_playerGibs.setYSpeed(-200, 0);
+		_playerGibs.setRotation( -720, -720);
+		_playerGibs.gravity = 360;
+		_playerGibs.bounce = 0.5;
+		_playerGibs.makeParticles('assets/player_gibs.png', 70, 16, true, 0.5);
+		
+		_robotGibs = new FlxEmitter();
+		_robotGibs.setXSpeed(-150, 150);
+		_robotGibs.setYSpeed(-200, 0);
+		_robotGibs.setRotation( -720, -720);
+		_robotGibs.gravity = 360;
+		_robotGibs.bounce = 0.5;
+		_robotGibs.makeParticles('assets/robot_gibs.png', 100, 16, true, 0.5);
+		
+		
 		
 		_mainframe = new Mainframe();
 		
@@ -73,7 +103,7 @@ class PlayState extends FlxState
 		_enemyBullets = new FlxGroup();
 		_enemyBullets.maxSize = 100;
 		
-		_player = new Player(_playerSpawn.x, _playerSpawn.y, _bullets);
+		_player = new Player(_playerSpawn.x, _playerSpawn.y, _bullets, _playerGibs);
 		
 		// Add all the things.
 		add(_bg);
@@ -84,6 +114,8 @@ class PlayState extends FlxState
 		add(_enemies);
 		add(_bullets);
 		add(_enemyBullets);
+		add(_playerGibs);
+		add(_robotGibs);
 		
 		_hazards = new FlxGroup();
 		_hazards.add(_enemies);
@@ -95,6 +127,8 @@ class PlayState extends FlxState
 		_objects.add(_mainframe);
 		_objects.add(_bullets);
 		_objects.add(_enemyBullets);
+		_objects.add(_playerGibs);
+		_objects.add(_robotGibs);
 		
 		// Setup camera.
 		FlxG.camera.follow(_player, FlxCamera.STYLE_PLATFORMER);
@@ -114,6 +148,8 @@ class PlayState extends FlxState
 		_mainframe = null;
 		_bullets = null;
 		_enemyBullets = null;
+		_playerGibs = null;
+		_robotGibs = null;
 		
 		_hazards = null;
 		_objects = null;
@@ -125,16 +161,30 @@ class PlayState extends FlxState
 	
 	override public function update():Void
 	{
+		_shutdownTimer += FlxG.elapsed;
+		if (_shutdownTimer > SHUTDOWN_TIME_LIMIT) 
+		{
+			_shutdownTimer = 0;
+			_isShutdown = !_isShutdown;
+			if (_isShutdown) 
+			{
+				_enemies.callAll('shutdown');
+			}
+			else 
+			{
+				_enemies.callAll('bootup');
+			}
+		}
+		
 		FlxG.collide(_tileMap, _objects);
 		FlxG.overlap(_hazards, _player, overlapHandler);
 		FlxG.overlap(_hazards, _mainframe, overlapHandler);
 		FlxG.overlap(_bullets, _hazards, overlapHandler);
 		
-		if (FlxRandom.chanceRoll(2)) 
+		if (!_isShutdown && FlxRandom.chanceRoll(2)) 
 		{
 			var enemy:Enemy = cast(_enemies.recycle(Enemy), Enemy);
-			//enemy.init(FlxRandom.intRanged(0, FlxG.width), FlxRandom.intRanged(0, FlxG.height), _enemyBullets, _player);
-			enemy.init(_spawnPoint.x, _spawnPoint.y, _enemyBullets, _player);
+			enemy.init(_spawnPoint.x, _spawnPoint.y, _enemyBullets, _player, _robotGibs);
 		}
 		
 		super.update();
@@ -161,12 +211,12 @@ class PlayState extends FlxState
 						//
 					case 1: // Player
 						_objectMap.setTile(tx, ty, 0);
-						_playerSpawn.make(tx * TILE_WIDTH + (TILE_WIDTH / 2), ty * TILE_HEIGHT + (TILE_WIDTH / 2));
+						_playerSpawn.make(tx * TILE_WIDTH + TILE_HALF_WIDTH, ty * TILE_HEIGHT + TILE_HALF_HEIGHT);
 					case 2: // Mainframe
 						_objectMap.setTile(tx, ty, 0);
-						_mainframe.init(tx * TILE_WIDTH + (TILE_WIDTH / 2), ty * TILE_HEIGHT + (TILE_WIDTH / 2));
+						_mainframe.init(tx * TILE_WIDTH + TILE_HALF_WIDTH, ty * TILE_HEIGHT + TILE_HALF_HEIGHT);
 					case 4: // Spawner
-						_spawnPoint.make(tx * TILE_WIDTH + (TILE_WIDTH / 2), ty * TILE_HEIGHT + (TILE_WIDTH / 2));
+						_spawnPoint.make(tx * TILE_WIDTH + TILE_HALF_WIDTH, ty * TILE_HEIGHT + TILE_HALF_HEIGHT);
 					default:
 						//trace('Unknown tile: ', tileValue);
 				}
@@ -184,7 +234,9 @@ class PlayState extends FlxState
 		{
 			sprite1.kill();
 		}
-		if (!sprite2.flickering) 
+		
+		// Don't hurt if flickering, unless it is an enemy.
+		if (!sprite2.flickering || Std.is(sprite2, Enemy)) 
 		{
 			sprite2.hurt(1);
 		}

@@ -74,6 +74,7 @@ class Bullet extends FlxSprite
 		super.reset(location.x - width / 2, location.y - height / 2);
 		solid = true;
 		
+		angle = 0;
 		switch (direction) 
 		{
 			case FlxObject.UP:
