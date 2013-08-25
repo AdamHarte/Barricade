@@ -32,11 +32,11 @@ class Wall extends FlxSprite
 		addAnimation('damage4', [4], 12, false);
 	}
 	
-	public function init(xPos:Float, yPos:Float, gibs:FlxEmitter):Void 
+	public function init(xPos:Float, yPos:Float, gibs:FlxEmitter, heavyWall = false):Void 
 	{
 		_gibs = gibs;
 		reset(xPos - width / 2, yPos - height / 2);
-		health = 5;
+		health = (heavyWall) ? 10 : 5;
 		play('idle');
 	}
 	

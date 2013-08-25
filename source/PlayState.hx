@@ -96,7 +96,7 @@ class PlayState extends FlxState
 		
 		// Setup groups.
 		_enemies = new FlxGroup();
-		_enemies.maxSize = 50;
+		//_enemies.maxSize = 50;
 		
 		_bullets = new FlxGroup();
 		_bullets.maxSize = 20; //TODO: Test how big this pool should be.
@@ -304,6 +304,10 @@ class PlayState extends FlxState
 						_objectMap.setTile(tx, ty, 0);
 						var light:Light = cast(_lights.recycle(Light), Light);
 						light.init(tx * TILE_WIDTH + TILE_HALF_WIDTH, ty * TILE_HEIGHT + TILE_HALF_HEIGHT, 1, _darkness);
+					case 7: // Heavy wall
+						_objectMap.setTile(tx, ty, 0);
+						var wall:Wall = cast(_walls.recycle(Wall), Wall);
+						wall.init(tx * TILE_WIDTH + TILE_HALF_WIDTH, ty * TILE_HEIGHT + TILE_HALF_HEIGHT, _robotGibs, true);
 					default:
 						//trace('Unknown tile: ', tileValue);
 				}
