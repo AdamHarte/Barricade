@@ -18,6 +18,10 @@ import org.flixel.util.FlxMath;
  */
 class MenuState extends FlxState
 {
+	private var _titleImg:FlxSprite;
+	private var _playButton:FlxButton;
+	
+	
 	/**
 	 * Function that is called up when to state is created to set it up. 
 	 */
@@ -30,26 +34,36 @@ class MenuState extends FlxState
 		FlxG.mouse.show();
 		#end
 		
+		_titleImg = new FlxSprite(0, 0, 'assets/title_screen.png');
+		_titleImg.origin.make();
+		_titleImg.scale.make(2, 2);
+		add(_titleImg);
 		
-		var title:FlxText = new FlxText(0, FlxG.height / 3, 256, 'Barricade');
+		/*var title:FlxText = new FlxText(0, FlxG.height / 3, 256, 'Barricade');
 		title.x = (FlxG.width - title.width) / 2;
 		title.setFormat(null, 42, 0x31a2ee, 'center');
 		title.antialiasing = true;
-		add(title);
+		add(title);*/
 		
-		var playButton:FlxButton = new FlxButton(0, FlxG.height / 3 + 62, 'PLAY', playClickHandler);
-		playButton.x = (FlxG.width - playButton.width) / 2;
-		//TODO: Maybe scale buttons.
-		playButton.color = 0x31a2ee;
-		playButton.label.color = 0x31a2ee;
-		add(playButton);
+		var credits:FlxText = new FlxText(0, 0, 256, 'by Adam Harte');
+		credits.x = (FlxG.width - credits.width) - 1;
+		credits.y = (FlxG.height - credits.height) - 1;
+		credits.setFormat(null, 8, 0x0e354b, 'right');
+		credits.antialiasing = true;
+		add(credits);
 		
+		_playButton = new FlxButton(0, FlxG.height * 0.6, 'PLAY', playClickHandler);
+		_playButton.x = (FlxG.width - _playButton.width) / 2;
+		_playButton.scale.make(0.8, 0.8);
+		_playButton.color = 0x31a2ee;
+		_playButton.label.color = 0x31a2ee;
+		add(_playButton);
 		
-		FlxG.flash(0xff31a2ee, 0.4);
+		FlxG.flash(0xff31a2ee, 1.4, flashCompleteHandler);
 		
 		
 		//TEMP: go straight to the play state.
-		FlxG.switchState(new PlayState());
+		//FlxG.switchState(new PlayState());
 		
 		super.create();
 	}
@@ -68,11 +82,18 @@ class MenuState extends FlxState
 	 */
 	override public function update():Void
 	{
+		//FlxG.camera
+		
 		super.update();
 	}
 	
 	
 	
+	
+	private function flashCompleteHandler() 
+	{
+		
+	}
 	
 	function playClickHandler() 
 	{
