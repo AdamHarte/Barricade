@@ -25,7 +25,7 @@ class WinState extends FlxState
 		winText.antialiasing = true;
 		add(winText);
 		
-		var scoreText:FlxText = new FlxText(0, FlxG.height * 0.7, 256, 'Your score: ' + Std.string(Reg.score));
+		var scoreText:FlxText = new FlxText(0, FlxG.height * 0.65, 256, 'Your score: ' + Std.string(Reg.score));
 		scoreText.x = (FlxG.width - scoreText.width) / 2;
 		scoreText.setFormat(null, 12, 0x31a2ee, 'center');
 		scoreText.antialiasing = true;
