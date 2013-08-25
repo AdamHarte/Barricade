@@ -11,6 +11,7 @@ import org.flixel.FlxGroup;
 import org.flixel.FlxObject;
 import org.flixel.FlxSprite;
 import org.flixel.FlxState;
+import org.flixel.FlxText;
 import org.flixel.FlxTilemap;
 import org.flixel.plugin.photonstorm.FlxDelay;
 import org.flixel.util.FlxPoint;
@@ -46,6 +47,7 @@ class PlayState extends FlxState
 	private var _robotGibs:FlxEmitter;
 	private var _darkness:FlxSprite;
 	private var _warmupTimer:Float;
+	private var _statusText:FlxText;
 	
 	// Collision groups
 	private var _hazards:FlxGroup;
@@ -70,6 +72,7 @@ class PlayState extends FlxState
 	{
 		FlxG.bgColor = 0xff1e2936;
 		
+		Reg.score = 0;
 		Reg.enemiesKilled = 0;
 		Reg.enemiesToSpawn = Reg.currentLevel.enemyCount;
 		_warmupTimer = 0;
@@ -129,6 +132,12 @@ class PlayState extends FlxState
 		
 		_hud = new HUD();
 		
+		_statusText = new FlxText(0, FlxG.height * 0.3, 200, 'GET READY');
+		Reg.statusText = _statusText;
+		_statusText.setFormat(null, 14, 0xb82535, 'center');
+		_statusText.antialiasing = true;
+		_statusText.scrollFactor.make();
+		
 		// Add all the things.
 		add(_bg);
 		add(_tileMap);
@@ -144,6 +153,7 @@ class PlayState extends FlxState
 		add(_robotGibs);
 		add(_darkness);
 		//add(_hud);
+		add(_statusText);
 		
 		_hazards = new FlxGroup();
 		_hazards.add(_enemies);
@@ -192,6 +202,7 @@ class PlayState extends FlxState
 		_playerGibs = null;
 		_robotGibs = null;
 		_darkness = null;
+		_statusText = null;
 		
 		_hazards = null;
 		_objects = null;
@@ -240,8 +251,12 @@ class PlayState extends FlxState
 		FlxG.overlap(_hazards, _playerStructures, overlapHandler);
 		FlxG.overlap(_bullets, _hazards, overlapHandler);
 		
-		_warmupTimer = Math.min(_warmupTimer + FlxG.elapsed, 3);
+		_warmupTimer = Math.min(_warmupTimer + FlxG.elapsed, 2);
 		var warmedUp:Bool = (_warmupTimer >= 2);
+		if (warmedUp && (_statusText.text != 'SUCCESS' && _statusText.text != 'FAIL')) 
+		{
+			_statusText.text = '';
+		}
 		
 		// Every 20 enemies int total increases change of spawn by 1 percent.
 		// The closer you get to killing all the enemies the bigger chance increase (up to 10 percent).
@@ -254,13 +269,6 @@ class PlayState extends FlxState
 		Reg.gameHud.update();
 		
 		super.update();
-	}
-	
-	override public function draw():Void 
-	{
-		//_darkness.fill(0x33000000);
-		
-		super.draw();
 	}
 	
 	private function spawnEnemy() 
@@ -363,6 +371,11 @@ class PlayState extends FlxState
 	
 	private function finishedLevel():Void 
 	{
+		_statusText.text = 'SUCCESS';
+		
+		Reg.scores[Reg.level] = Reg.score;
+		//Reg.score = 0;
+		
 		var timer:FlxTimer = new FlxTimer();
 		timer.start(1, 1, gotoNextLevel);
 	}

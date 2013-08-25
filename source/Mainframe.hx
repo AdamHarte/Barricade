@@ -90,6 +90,7 @@ class Mainframe extends FlxSprite
 		_gibs.start(true, 3, 0, 20);
 		
 		//Reg.score -= 100;
+		Reg.statusText.text = 'FAIL';
 		
 		FlxG.camera.shake(0.05, 0.4);
 		FlxG.camera.flash(0xffd7c590, 0.35);

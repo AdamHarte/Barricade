@@ -5,6 +5,7 @@ import flash.display.Sprite;
 import flash.text.Font;
 import openfl.Assets;
 import org.flixel.FlxSave;
+import org.flixel.FlxText;
 import org.flixel.FlxTilemap;
 
 /**
@@ -24,6 +25,7 @@ class Reg
 	
 	static public var shutdownTimer:Float;
 	static public var isShutdown:Bool = false;
+	static public var statusText:FlxText;
 	
 	/**
 	 * Generic levels Array that can be used for cross-state stuff.
@@ -39,7 +41,7 @@ class Reg
 	 * Generic scores Array that can be used for cross-state stuff.
 	 * Example usage: Storing the scores for level.
 	 */
-	static public var scores:Array<Dynamic> = [];
+	static public var scores:Array<Int> = [];
 	/**
 	 * Generic score variable that can be used for cross-state stuff.
 	 * Example usage: Storing the current score.

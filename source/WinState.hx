@@ -17,7 +17,7 @@ class WinState extends FlxState
 	{
 		_finishTimer = 0;
 		
-		Reg.scores.push(Reg.score);
+		//Reg.scores.push(Reg.score);
 		
 		var winText:FlxText = new FlxText(0, FlxG.height / 3, 256, 'YOU WIN!');
 		winText.x = (FlxG.width - winText.width) / 2;
@@ -25,7 +25,13 @@ class WinState extends FlxState
 		winText.antialiasing = true;
 		add(winText);
 		
-		var scoreText:FlxText = new FlxText(0, FlxG.height * 0.65, 256, 'Your score: ' + Std.string(Reg.score));
+		var finalScore:Int = 0;
+		for (i in 0...Reg.scores.length) 
+		{
+			finalScore += Reg.scores[i];
+		}
+		
+		var scoreText:FlxText = new FlxText(0, FlxG.height * 0.65, 256, 'Your score: ' + Std.string(finalScore));
 		scoreText.x = (FlxG.width - scoreText.width) / 2;
 		scoreText.setFormat(null, 12, 0x31a2ee, 'center');
 		scoreText.antialiasing = true;

@@ -100,7 +100,8 @@ class MenuState extends FlxState
 	
 	function playClickHandler() 
 	{
-		FlxG.switchState(new PlayState());
+		//FlxG.switchState(new PlayState());
+		FlxG.switchState(new GuideState());
 	}
 	
 	
