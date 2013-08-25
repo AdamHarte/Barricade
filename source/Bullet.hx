@@ -21,10 +21,10 @@ class Bullet extends FlxSprite
 		
 		loadGraphic('assets/bullet.png', true);
 		//TODO: Maybe use loadRotatedGraphic instead.
-		width = 7;
+		width = 2;
 		height = 2;
-		offset.x = 1;
-		offset.y = 4;
+		offset.x = 3;
+		offset.y = 3;
 		
 		addAnimation('up', [0]);
 		addAnimation('down', [1]);

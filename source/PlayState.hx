@@ -45,6 +45,7 @@ class PlayState extends FlxState
 	private var _playerGibs:FlxEmitter;
 	private var _robotGibs:FlxEmitter;
 	private var _darkness:FlxSprite;
+	private var _warmupTimer:Float;
 	
 	// Collision groups
 	private var _hazards:FlxGroup;
@@ -71,6 +72,7 @@ class PlayState extends FlxState
 		
 		Reg.enemiesKilled = 0;
 		Reg.enemiesToSpawn = Reg.currentLevel.enemyCount;
+		_warmupTimer = 0;
 		
 		_playerSpawn = new FlxPoint();
 		_spawnPoints = [];
@@ -238,10 +240,13 @@ class PlayState extends FlxState
 		FlxG.overlap(_hazards, _playerStructures, overlapHandler);
 		FlxG.overlap(_bullets, _hazards, overlapHandler);
 		
+		_warmupTimer = Math.min(_warmupTimer + FlxG.elapsed, 3);
+		var warmedUp:Bool = (_warmupTimer >= 2);
+		
 		// Every 20 enemies int total increases change of spawn by 1 percent.
 		// The closer you get to killing all the enemies the bigger chance increase (up to 10 percent).
 		var chance:Int = Math.round(1 + (Reg.currentLevel.enemyCount / 20) + (10 * (Reg.enemiesKilled / Reg.currentLevel.enemyCount)));
-		if (Reg.enemiesToSpawn > 0 && !Reg.isShutdown && FlxRandom.chanceRoll(chance)) 
+		if (warmedUp && Reg.enemiesToSpawn > 0 && !Reg.isShutdown && FlxRandom.chanceRoll(chance)) 
 		{
 			spawnEnemy();
 		}
