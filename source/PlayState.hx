@@ -35,12 +35,14 @@ class PlayState extends FlxState
 	private var _enemies:FlxGroup;
 	private var _bullets:FlxGroup;
 	private var _enemyBullets:FlxGroup;
+	private var _walls:FlxGroup;
 	private var _playerGibs:FlxEmitter;
 	private var _robotGibs:FlxEmitter;
 	
 	// Collision groups
 	private var _hazards:FlxGroup;
 	private var _objects:FlxGroup;
+	private var _playerStructures:FlxGroup;
 	
 	private var _playerSpawn:FlxPoint;
 	private var _spawnPoint:FlxPoint;
@@ -86,14 +88,7 @@ class PlayState extends FlxState
 		
 		_mainframe = new Mainframe();
 		
-		var _bg = new FlxSprite(0, 0, 'assets/bg.png');
-		_bg.scale.make(4.0, 4.0);
-		_bg.scrollFactor.make(0.2, 0.2);
-		
-		_tileMap = new FlxTilemap();
-		_objectMap = new FlxTilemap();
-		buildLevel();
-		
+		// Setup groups.
 		_enemies = new FlxGroup();
 		_enemies.maxSize = 50;
 		
@@ -103,6 +98,17 @@ class PlayState extends FlxState
 		_enemyBullets = new FlxGroup();
 		_enemyBullets.maxSize = 100;
 		
+		_walls = new FlxGroup();
+		
+		var _bg = new FlxSprite(0, 0, 'assets/bg.png');
+		_bg.scale.make(4.0, 4.0);
+		_bg.scrollFactor.make(0.2, 0.2);
+		
+		// Setup tile maps.
+		_tileMap = new FlxTilemap();
+		_objectMap = new FlxTilemap();
+		buildLevel();
+		
 		_player = new Player(_playerSpawn.x, _playerSpawn.y, _bullets, _playerGibs);
 		
 		// Add all the things.
@@ -110,6 +116,7 @@ class PlayState extends FlxState
 		add(_tileMap);
 		add(_objectMap);
 		add(_mainframe);
+		add(_walls);
 		add(_player);
 		add(_enemies);
 		add(_bullets);
@@ -127,8 +134,13 @@ class PlayState extends FlxState
 		_objects.add(_mainframe);
 		_objects.add(_bullets);
 		_objects.add(_enemyBullets);
+		_objects.add(_walls);
 		_objects.add(_playerGibs);
 		_objects.add(_robotGibs);
+		
+		_playerStructures = new FlxGroup();
+		_playerStructures.add(_mainframe);
+		_playerStructures.add(_walls);
 		
 		// Setup camera.
 		FlxG.camera.follow(_player, FlxCamera.STYLE_PLATFORMER);
@@ -138,7 +150,7 @@ class PlayState extends FlxState
 		
 		super.create();
 		
-		FlxG.flash(0xff000000, 1);
+		FlxG.camera.fade(0xff000000, 1, true);
 	}
 	
 	override public function destroy():Void
@@ -150,11 +162,13 @@ class PlayState extends FlxState
 		_mainframe = null;
 		_bullets = null;
 		_enemyBullets = null;
+		_walls = null;
 		_playerGibs = null;
 		_robotGibs = null;
 		
 		_hazards = null;
 		_objects = null;
+		_playerStructures = null;
 		
 		_tileMap = null;
 		_objectMap = null;
@@ -179,8 +193,9 @@ class PlayState extends FlxState
 		}
 		
 		FlxG.collide(_tileMap, _objects);
+		FlxG.collide(_walls, _enemies);
 		FlxG.overlap(_hazards, _player, overlapHandler);
-		FlxG.overlap(_hazards, _mainframe, overlapHandler);
+		FlxG.overlap(_hazards, _playerStructures, overlapHandler);
 		FlxG.overlap(_bullets, _hazards, overlapHandler);
 		
 		if (!_isShutdown && FlxRandom.chanceRoll(2)) 
@@ -219,6 +234,10 @@ class PlayState extends FlxState
 						_mainframe.init(tx * TILE_WIDTH + TILE_HALF_WIDTH, ty * TILE_HEIGHT + TILE_HALF_HEIGHT, _robotGibs);
 					case 4: // Spawner
 						_spawnPoint.make(tx * TILE_WIDTH + TILE_HALF_WIDTH, ty * TILE_HEIGHT + TILE_HALF_HEIGHT);
+					case 5: // Wall
+						_objectMap.setTile(tx, ty, 0);
+						var wall:Wall = cast(_walls.recycle(Wall), Wall);
+						wall.init(tx * TILE_WIDTH + TILE_HALF_WIDTH, ty * TILE_HEIGHT + TILE_HALF_HEIGHT, _robotGibs);
 					default:
 						//trace('Unknown tile: ', tileValue);
 				}
@@ -238,9 +257,20 @@ class PlayState extends FlxState
 		}
 		
 		// Don't hurt if flickering, unless it is an enemy.
-		if (!sprite2.flickering || Std.is(sprite2, Enemy)) 
+		if ((!sprite1.flickering && !sprite2.flickering) || Std.is(sprite2, Enemy)) 
 		{
-			sprite2.hurt(1);
+			if (Std.is(sprite1, Enemy)) 
+			{
+				// If enemy is shutdown then don't hurt player.
+				if (!cast(sprite1, Enemy).isShutdown) 
+				{
+					sprite2.hurt(1);
+				}
+			}
+			else 
+			{
+				sprite2.hurt(1);
+			}
 		}
 	}
 	

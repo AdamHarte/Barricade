@@ -13,20 +13,21 @@ import org.flixel.util.FlxRandom;
  */
 class Enemy extends FlxSprite
 {
+	public var isShutdown:Bool;
+	
 	private var _jumpPower:Int;
 	private var _player:Player;
 	private var _bullets:FlxGroup;
 	private var _gibs:FlxEmitter;
 	private var _jumpTimer:Float;
 	private var _wakeTimer:Float;
-	private var _isShutdown:Bool;
 	
 	
 	public function new() 
 	{
 		super();
 		
-		_isShutdown = false;
+		isShutdown = false;
 		_jumpTimer = 0;
 		_wakeTimer = 0;
 		
@@ -78,7 +79,7 @@ class Enemy extends FlxSprite
 		acceleration.x = 0;
 		
 		var isAwake:Bool = false;
-		if (!_isShutdown) 
+		if (!isShutdown) 
 		{
 			_wakeTimer += FlxG.elapsed;
 			if (_wakeTimer > 0.6) 
@@ -157,14 +158,14 @@ class Enemy extends FlxSprite
 	
 	public function shutdown():Void 
 	{
-		_isShutdown = true;
+		isShutdown = true;
 		play('sleep');
 		
 	}
 	
 	public function bootup():Void 
 	{
-		_isShutdown = false;
+		isShutdown = false;
 		_wakeTimer = 0;
 		play('wake');
 	}
