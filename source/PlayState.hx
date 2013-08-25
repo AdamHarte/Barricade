@@ -87,8 +87,6 @@ class PlayState extends FlxState
 		_robotGibs.bounce = 0.5;
 		_robotGibs.makeParticles('assets/robot_gibs.png', 100, 16, true, 0.5);
 		
-		
-		
 		_mainframe = new Mainframe();
 		
 		// Setup groups.
@@ -109,7 +107,9 @@ class PlayState extends FlxState
 		
 		// Setup tile maps.
 		_tileMap = new FlxTilemap();
+		Reg.tileMap = _tileMap;
 		_objectMap = new FlxTilemap();
+		Reg.objectMap = _objectMap;
 		buildLevel();
 		
 		_player = new Player(_playerSpawn.x, _playerSpawn.y, _bullets, _playerGibs);
@@ -220,7 +220,7 @@ class PlayState extends FlxState
 	{
 		Reg.enemiesToSpawn--;
 		var enemy:Enemy = cast(_enemies.recycle(Enemy), Enemy);
-		enemy.init(_spawnPoint.x, _spawnPoint.y, _enemyBullets, _player, _robotGibs);
+		enemy.init(_spawnPoint.x, _spawnPoint.y, _enemyBullets, _player, _robotGibs, _mainframe);
 	}
 	
 	

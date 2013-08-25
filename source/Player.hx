@@ -16,6 +16,8 @@ class Player extends FlxSprite
 {
 	private static var MAX_HEALTH:Int = 10;
 	
+	public var playerMidPoint:FlxPoint;
+	
 	private var _jumpPower:Int;
 	private var _bullets:FlxGroup;
 	private var _gibs:FlxEmitter;
@@ -27,6 +29,7 @@ class Player extends FlxSprite
 	{
 		super(startX, startY);
 		
+		playerMidPoint = new FlxPoint();
 		_spawnPoint = new FlxPoint(startX, startY);
 		_bullets = bullets;
 		_gibs = gibs;
@@ -59,6 +62,7 @@ class Player extends FlxSprite
 		
 		_bullets = null;
 		_gibs = null;
+		playerMidPoint = null;
 	}
 	
 	override public function update():Void
@@ -72,6 +76,8 @@ class Player extends FlxSprite
 			}
 			return;
 		}
+		
+		getMidpoint(playerMidPoint);
 		
 		// Movement
 		acceleration.x = 0;
@@ -110,28 +116,23 @@ class Player extends FlxSprite
 		// Shoot
 		if (FlxG.mouse.justPressed()) 
 		{
-			getMidpoint(_point);
-			cast(_bullets.recycle(Bullet), Bullet).shootPrecise(_point, FlxAngle.angleBetweenMouse(this));
+			cast(_bullets.recycle(Bullet), Bullet).shootPrecise(playerMidPoint, FlxAngle.angleBetweenMouse(this));
 		}
 		else if (FlxG.keys.justPressed('LEFT')) 
 		{
-			getMidpoint(_point);
-			cast(_bullets.recycle(Bullet), Bullet).shoot(_point, FlxObject.LEFT);
+			cast(_bullets.recycle(Bullet), Bullet).shoot(playerMidPoint, FlxObject.LEFT);
 		}
 		else if (FlxG.keys.justPressed('RIGHT')) 
 		{
-			getMidpoint(_point);
-			cast(_bullets.recycle(Bullet), Bullet).shoot(_point, FlxObject.RIGHT);
+			cast(_bullets.recycle(Bullet), Bullet).shoot(playerMidPoint, FlxObject.RIGHT);
 		}
 		else if (FlxG.keys.justPressed('UP')) 
 		{
-			getMidpoint(_point);
-			cast(_bullets.recycle(Bullet), Bullet).shoot(_point, FlxObject.UP);
+			cast(_bullets.recycle(Bullet), Bullet).shoot(playerMidPoint, FlxObject.UP);
 		}
 		else if (FlxG.keys.justPressed('DOWN')) 
 		{
-			getMidpoint(_point);
-			cast(_bullets.recycle(Bullet), Bullet).shoot(_point, FlxObject.DOWN);
+			cast(_bullets.recycle(Bullet), Bullet).shoot(playerMidPoint, FlxObject.DOWN);
 		}
 		
 		super.update();

@@ -15,6 +15,9 @@ import org.flixel.FlxTilemap;
  */
 class Reg
 {
+	static public var tileMap:FlxTilemap;
+	static public var objectMap:FlxTilemap;
+	
 	/**
 	 * Generic levels Array that can be used for cross-state stuff.
 	 * Example usage: Storing the levels of a platformer.
