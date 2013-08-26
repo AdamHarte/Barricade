@@ -234,12 +234,14 @@ class PlayState extends FlxState
 			Reg.isShutdown = !Reg.isShutdown;
 			if (Reg.isShutdown) 
 			{
+				//Reg.statusText.text = ''; //TODO: Set the status to give hints on the first level e.g. "Now it you chance! Destroy them while they are rebooting"
 				FlxG.play('Shutdown');
 				_enemies.callAll('shutdown');
 				_darkness.fill(0x33000000);
 			}
 			else 
 			{
+				//Reg.statusText.text = ''; //TODO: Set the status to give hints on the first level e.g. "Watch out! They have rebooted and are coming at us again"
 				FlxG.play('Bootup');
 				_enemies.callAll('bootup');
 				_darkness.fill(0x00000000);
