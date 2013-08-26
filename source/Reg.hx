@@ -78,4 +78,15 @@ class Reg
 		var level:Level = new Level(levelName, fileName, enemyCount);
 		Reg.levels.push(level);
 	}
+	
+	static public function getTotalScore():Int 
+	{
+		var finalScore:Int = 0;
+		for (i in 0...Reg.scores.length) 
+		{
+			finalScore += Reg.scores[i];
+		}
+		return finalScore;
+	}
+	
 }

@@ -3,6 +3,9 @@ package ;
 import org.flixel.FlxEmitter;
 import org.flixel.FlxG;
 import org.flixel.FlxSprite;
+#if (flash)
+import org.flixel.plugin.photonstorm.api.FlxKongregate;
+#end
 
 /**
  * ...
@@ -80,6 +83,13 @@ class Mainframe extends FlxSprite
 		}
 		
 		super.kill();
+		
+		#if (flash)
+		if (FlxKongregate.hasLoaded) 
+		{
+			FlxKongregate.submitStats('MainframeDeaths', 1);
+		}
+		#end
 		
 		flicker(0);
 		exists = true;

@@ -1,8 +1,13 @@
 package;
 
+import flash.events.Event;
 import flash.Lib;
 import openfl.Assets;
+import org.flixel.FlxG;
 import org.flixel.FlxGame;
+#if (flash)
+import org.flixel.plugin.photonstorm.api.FlxKongregate;
+#end
 
 /**
  * ...
@@ -24,6 +29,11 @@ class Barricade extends FlxGame
 		
 		var gameHud:GameHUD = new GameHUD();
 		Reg.gameHud = gameHud;
+		
+		if (stage != null) 
+			init();
+		else 
+			addEventListener(Event.ADDED_TO_STAGE, init);
 	}
 	
 	private function loadLevels() 
@@ -38,4 +48,27 @@ class Barricade extends FlxGame
 		Reg.addLevel('Barricade', 		'08', 80);
 		
 	}
+	
+	private function init(?e:Event = null):Void 
+	{
+		if (hasEventListener(Event.ADDED_TO_STAGE))
+		{
+			removeEventListener(Event.ADDED_TO_STAGE, init);
+		}
+		
+		#if (flash)
+		//trace(FlxKongregate.hasLoaded, FlxG.stage);
+		FlxKongregate.init(kongInitHandler);
+		#end
+		
+	}
+	
+	
+	#if (flash)
+	private function kongInitHandler() 
+	{
+		//trace('init, now connecting');
+		FlxKongregate.connect();
+	}
+	#end
 }

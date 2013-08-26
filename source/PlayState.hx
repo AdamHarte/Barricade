@@ -13,10 +13,12 @@ import org.flixel.FlxSprite;
 import org.flixel.FlxState;
 import org.flixel.FlxText;
 import org.flixel.FlxTilemap;
-import org.flixel.plugin.photonstorm.FlxDelay;
 import org.flixel.util.FlxPoint;
 import org.flixel.util.FlxRandom;
 import org.flixel.util.FlxTimer;
+#if (flash)
+import org.flixel.plugin.photonstorm.api.FlxKongregate;
+#end
 
 /**
  * ...
@@ -373,8 +375,17 @@ class PlayState extends FlxState
 	{
 		_statusText.text = 'SUCCESS';
 		
+		
+		
 		Reg.scores[Reg.level] = Reg.score;
 		//Reg.score = 0;
+		
+		#if (flash)
+		if (FlxKongregate.hasLoaded) 
+		{
+			FlxKongregate.submitScore(Reg.getTotalScore(), 'Max');
+		}
+		#end
 		
 		var timer:FlxTimer = new FlxTimer();
 		timer.start(1, 1, gotoNextLevel);

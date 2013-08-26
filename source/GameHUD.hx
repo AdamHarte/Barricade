@@ -44,14 +44,18 @@ class GameHUD extends Sprite
 		}
 		
 		_scoreLabel = createTextField(10, 10, 200, 'Score:', 12);
+		_scoreLabel.height = 50;
 		_scoreTxt = createTextField(10, 26, 200, '0', 18);
+		_scoreTxt.height = 50;
 		addChild(_scoreLabel);
 		addChild(_scoreTxt);
 		
 		//_botsKilledLabel = createTextField(10, 50, 200, 'Bots killed:', 10);
 		//_botsKilledTxt = createTextField(10, 66, 200, '0', 18);
 		_botsKilledLabel = createTextField(stage.stageWidth - 210, 10, 200, 'Bots destroyed:', 12, 1);
+		_botsKilledLabel.height = 50;
 		_botsKilledTxt = createTextField(stage.stageWidth - 210, 26, 200, '0', 18, 1);
+		_botsKilledTxt.height = 50;
 		addChild(_botsKilledLabel);
 		addChild(_botsKilledTxt);
 		
@@ -61,7 +65,9 @@ class GameHUD extends Sprite
 		addChild(_botTxt);*/
 		
 		_countdownLabel = createTextField(stage.stageWidth / 2 - 100, 10, 200, 'COUNTDOWN', 12, 2);
+		_countdownLabel.height = 50;
 		_countdownTxt = createTextField(stage.stageWidth / 2 - 100, 26, 200, '0', 24, 2);
+		_countdownTxt.height = 50;
 		addChild(_countdownLabel);
 		addChild(_countdownTxt);
 		

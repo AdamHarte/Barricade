@@ -7,6 +7,9 @@ import org.flixel.FlxObject;
 import org.flixel.FlxSprite;
 import org.flixel.util.FlxAngle;
 import org.flixel.util.FlxPoint;
+#if (flash)
+import org.flixel.plugin.photonstorm.api.FlxKongregate;
+#end
 
 /**
  * ...
@@ -163,6 +166,13 @@ class Player extends FlxSprite
 		}
 		
 		super.kill();
+		
+		#if (flash)
+		if (FlxKongregate.hasLoaded) 
+		{
+			FlxKongregate.submitStats('Deaths', 1);
+		}
+		#end
 		
 		flicker(0);
 		FlxG.play('Explosion', 0.6);
