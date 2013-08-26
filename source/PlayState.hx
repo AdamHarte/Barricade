@@ -385,7 +385,8 @@ class PlayState extends FlxState
 		#if (flash)
 		if (FlxKongregate.hasLoaded) 
 		{
-			FlxKongregate.submitScore(Reg.getTotalScore(), 'Max');
+			FlxKongregate.submitStats('HighScore', Reg.getTotalScore());
+			FlxKongregate.submitStats('HighestLevel', Reg.level + 1);
 		}
 		#end
 		
