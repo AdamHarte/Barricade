@@ -26,6 +26,8 @@ class Player extends FlxSprite
 	private var _gibs:FlxEmitter;
 	private var _restart:Float;
 	private var _spawnPoint:FlxPoint;
+	private var _reloadTimer:Float;
+	private var _reloadMax:Float;
 	
 	
 	public function new(startX:Float, startY:Float, bullets:FlxGroup, gibs:FlxEmitter) 
@@ -37,6 +39,8 @@ class Player extends FlxSprite
 		_bullets = bullets;
 		_gibs = gibs;
 		_restart = 0;
+		_reloadTimer = 0;
+		_reloadMax = 0.2;
 		
 		loadGraphic('assets/player.png', true, true, 8, 8);
 		width = 6;
@@ -121,28 +125,40 @@ class Player extends FlxSprite
 		}
 		
 		// Shoot
-		if (FlxG.mouse.justPressed()) 
+		_reloadTimer += FlxG.elapsed;
+		var shotReady:Bool = false;
+		if (_reloadTimer >= _reloadMax) 
 		{
+			_reloadTimer = 0;
+			shotReady = true;
+		}
+		if (FlxG.mouse.justPressed() || (shotReady && FlxG.mouse.pressed())) 
+		{
+			_reloadTimer = 0;
 			playShootSound();
 			cast(_bullets.recycle(Bullet), Bullet).shootPrecise(playerMidPoint, FlxAngle.angleBetweenMouse(this));
 		}
-		else if (FlxG.keys.justPressed('LEFT')) 
+		else if (FlxG.keys.justPressed('LEFT') || (shotReady && FlxG.keys.LEFT)) 
 		{
+			_reloadTimer = 0;
 			playShootSound();
 			cast(_bullets.recycle(Bullet), Bullet).shoot(playerMidPoint, FlxObject.LEFT);
 		}
-		else if (FlxG.keys.justPressed('RIGHT')) 
+		else if (FlxG.keys.justPressed('LEFT') || (shotReady && FlxG.keys.RIGHT)) 
 		{
+			_reloadTimer = 0;
 			playShootSound();
 			cast(_bullets.recycle(Bullet), Bullet).shoot(playerMidPoint, FlxObject.RIGHT);
 		}
-		else if (FlxG.keys.justPressed('UP')) 
+		else if (FlxG.keys.justPressed('LEFT') || (shotReady && FlxG.keys.UP)) 
 		{
+			_reloadTimer = 0;
 			playShootSound();
 			cast(_bullets.recycle(Bullet), Bullet).shoot(playerMidPoint, FlxObject.UP);
 		}
-		else if (FlxG.keys.justPressed('DOWN')) 
+		else if (FlxG.keys.justPressed('LEFT') || (shotReady && FlxG.keys.DOWN)) 
 		{
+			_reloadTimer = 0;
 			playShootSound();
 			cast(_bullets.recycle(Bullet), Bullet).shoot(playerMidPoint, FlxObject.DOWN);
 		}
@@ -199,6 +215,7 @@ class Player extends FlxSprite
 		exists = true;
 		visible = true;
 		health = MAX_HEALTH;
+		_reloadTimer = 0;
 		flicker(1);
 	}
 	
