@@ -144,19 +144,19 @@ class Player extends FlxSprite
 			playShootSound();
 			cast(_bullets.recycle(Bullet), Bullet).shoot(playerMidPoint, FlxObject.LEFT);
 		}
-		else if (FlxG.keys.justPressed('LEFT') || (shotReady && FlxG.keys.RIGHT)) 
+		else if (FlxG.keys.justPressed('RIGHT') || (shotReady && FlxG.keys.RIGHT)) 
 		{
 			_reloadTimer = 0;
 			playShootSound();
 			cast(_bullets.recycle(Bullet), Bullet).shoot(playerMidPoint, FlxObject.RIGHT);
 		}
-		else if (FlxG.keys.justPressed('LEFT') || (shotReady && FlxG.keys.UP)) 
+		else if (FlxG.keys.justPressed('UP') || (shotReady && FlxG.keys.UP)) 
 		{
 			_reloadTimer = 0;
 			playShootSound();
 			cast(_bullets.recycle(Bullet), Bullet).shoot(playerMidPoint, FlxObject.UP);
 		}
-		else if (FlxG.keys.justPressed('LEFT') || (shotReady && FlxG.keys.DOWN)) 
+		else if (FlxG.keys.justPressed('DOWN') || (shotReady && FlxG.keys.DOWN)) 
 		{
 			_reloadTimer = 0;
 			playShootSound();
