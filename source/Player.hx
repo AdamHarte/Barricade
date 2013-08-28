@@ -134,33 +134,23 @@ class Player extends FlxSprite
 		}
 		if (FlxG.mouse.justPressed() || (shotReady && FlxG.mouse.pressed())) 
 		{
-			_reloadTimer = 0;
-			playShootSound();
-			cast(_bullets.recycle(Bullet), Bullet).shootPrecise(playerMidPoint, FlxAngle.angleBetweenMouse(this));
+			shoot(null, FlxAngle.angleBetweenMouse(this));
 		}
 		else if (FlxG.keys.justPressed('LEFT') || (shotReady && FlxG.keys.LEFT)) 
 		{
-			_reloadTimer = 0;
-			playShootSound();
-			cast(_bullets.recycle(Bullet), Bullet).shoot(playerMidPoint, FlxObject.LEFT);
+			shoot(FlxObject.LEFT);
 		}
 		else if (FlxG.keys.justPressed('RIGHT') || (shotReady && FlxG.keys.RIGHT)) 
 		{
-			_reloadTimer = 0;
-			playShootSound();
-			cast(_bullets.recycle(Bullet), Bullet).shoot(playerMidPoint, FlxObject.RIGHT);
+			shoot(FlxObject.RIGHT);
 		}
 		else if (FlxG.keys.justPressed('UP') || (shotReady && FlxG.keys.UP)) 
 		{
-			_reloadTimer = 0;
-			playShootSound();
-			cast(_bullets.recycle(Bullet), Bullet).shoot(playerMidPoint, FlxObject.UP);
+			shoot(FlxObject.UP);
 		}
 		else if (FlxG.keys.justPressed('DOWN') || (shotReady && FlxG.keys.DOWN)) 
 		{
-			_reloadTimer = 0;
-			playShootSound();
-			cast(_bullets.recycle(Bullet), Bullet).shoot(playerMidPoint, FlxObject.DOWN);
+			shoot(FlxObject.DOWN);
 		}
 		
 		super.update();
@@ -219,8 +209,12 @@ class Player extends FlxSprite
 		flicker(1);
 	}
 	
-	private function playShootSound() 
+	private function shoot(?direction:Int, ?angle:Float) 
 	{
+		trace('shoot');
+		_reloadTimer = 0;
+		
+		// Make the shoot sound.
 		if (FlxG.timeScale < 0.7) 
 		{
 			FlxG.play('ShootSlow', 0.5);
@@ -228,6 +222,17 @@ class Player extends FlxSprite
 		else 
 		{
 			FlxG.play('Shoot', 0.5);
+		}
+		
+		// Fire the bullet.
+		var bullet:Bullet = cast(_bullets.recycle(Bullet), Bullet);
+		if (direction == null) 
+		{
+			bullet.shootPrecise(playerMidPoint, angle);
+		}
+		else 
+		{
+			bullet.shoot(playerMidPoint, direction);
 		}
 	}
 	
