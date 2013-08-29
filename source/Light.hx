@@ -7,19 +7,15 @@ import org.flixel.FlxSprite;
  */
 class Light extends FlxSprite
 {
-	public var _lightType:Int;
-	public var _darkness:FlxSprite;
+	private var _lightType:Int;
+	private var _darkness:FlxSprite;
 	
 	
 	public function new() 
 	{
 		super();
 		
-		loadGraphic('assets/lights.png', true, true, 8, 8);
-		width = 6;
-		//height = 7;
-		offset.x = 1;
-		//offset.y = 1;
+		loadGraphic('assets/lights.png', true, true, Reg.tileWidth, Reg.tileHeight);
 		
 		// Setup animations.
 		addAnimation('light0_on', [0], 6, false);

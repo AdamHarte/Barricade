@@ -15,27 +15,21 @@ class Bullet extends FlxSprite
 	public var speed:Float;
 	public var trail:FlxTrail;
 	
+	
 	public function new() 
 	{
 		super();
 		
-		speed = 180;
+		speed = 350;
 		
 		loadGraphic('assets/bullet.png', true);
-		//TODO: Maybe use loadRotatedGraphic instead.
-		width = 2;
-		height = 2;
-		offset.x = 3;
-		offset.y = 3;
+		width = 4;
+		height = 4;
+		offset.x = 6;
+		offset.y = 6;
 		
-		/*addAnimation('up', [0]);
-		addAnimation('down', [1]);
-		addAnimation('left', [2]);
-		addAnimation('right', [3]);
-		addAnimation('hit', [4, 5, 6], 12, false);*/
 		addAnimation('idle', [0]);
 		addAnimation('hit', [1, 2, 3], 12, false);
-		
 	}
 	
 	override public function update():Void
@@ -79,22 +73,17 @@ class Bullet extends FlxSprite
 	{
 		super.reset(location.x - width / 2, location.y - height / 2);
 		solid = true;
-		
 		angle = 0;
 		play('idle');
 		switch (direction) 
 		{
 			case FlxObject.UP:
-				//play('up');
 				velocity.y = -speed;
 			case FlxObject.DOWN:
-				//play('down');
 				velocity.y = speed;
 			case FlxObject.LEFT:
-				//play('left');
 				velocity.x = -speed;
 			case FlxObject.RIGHT:
-				//play('right');
 				velocity.x = speed;
 		}
 	}
@@ -103,9 +92,7 @@ class Bullet extends FlxSprite
 	{
 		super.reset(location.x - width / 2, location.y - height / 2);
 		solid = true;
-		
 		play('idle');
-		//angle = FlxAngle.asDegrees(rotationAngle);
 		velocity.x = Math.cos(rotationAngle) * speed;
 		velocity.y = Math.sin(rotationAngle) * speed;
 	}

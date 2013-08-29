@@ -13,25 +13,24 @@ class EnemyBullet extends FlxSprite
 {
 	public var speed:Float;
 	
+	
 	public function new() 
 	{
 		super();
 		
-		speed = 100;
+		speed = 200;
 		
 		loadGraphic('assets/bullet.png', true);
-		//TODO: Maybe use loadRotatedGraphic instead.
-		width = 2;
-		height = 2;
-		offset.x = 3;
-		offset.y = 3;
+		width = 4;
+		height = 4;
+		offset.x = 6;
+		offset.y = 6;
 		
 		addAnimation('up', [0]);
 		addAnimation('down', [1]);
 		addAnimation('left', [2]);
 		addAnimation('right', [3]);
 		addAnimation('hit', [4, 5, 6], 12, false);
-		
 	}
 	
 	override public function update():Void
@@ -73,7 +72,6 @@ class EnemyBullet extends FlxSprite
 	{
 		super.reset(location.x - width / 2, location.y - height / 2);
 		solid = true;
-		
 		switch (direction) 
 		{
 			case FlxObject.UP:
@@ -95,10 +93,8 @@ class EnemyBullet extends FlxSprite
 	{
 		super.reset(location.x - width / 2, location.y - height / 2);
 		solid = true;
-		
 		play('left');
 		angle = FlxAngle.asDegrees(rotationAngle);
-		//angle = Math.round(FlxAngle.asDegrees(rotationAngle) / 20) * 20;
 		velocity.x = Math.cos(rotationAngle) * speed;
 		velocity.y = Math.sin(rotationAngle) * speed;
 	}

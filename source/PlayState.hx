@@ -26,10 +26,6 @@ import org.flixel.plugin.photonstorm.api.FlxKongregate;
  */
 class PlayState extends FlxState
 {
-	static public var TILE_WIDTH:Int = 8;
-	static public var TILE_HEIGHT:Int = 8;
-	static public var TILE_HALF_WIDTH:Int = 4;
-	static public var TILE_HALF_HEIGHT:Int = 4;
 	static public var SHUTDOWN_TIME_LIMIT:Float = 10;
 	
 	private var levelTilesPath:String;
@@ -286,10 +282,10 @@ class PlayState extends FlxState
 	
 	private function buildLevel() 
 	{
-		_tileMap.loadMap(Reg.currentLevel.data, levelTilesPath, TILE_WIDTH, TILE_HEIGHT, FlxTilemap.AUTO);
+		_tileMap.loadMap(Reg.currentLevel.data, levelTilesPath, Reg.tileWidth, Reg.tileHeight, FlxTilemap.AUTO);
 		
 		// Place other objects
-		_objectMap.loadMap(Reg.currentLevel.objData, levelObjectsPath, TILE_WIDTH, TILE_HEIGHT);
+		_objectMap.loadMap(Reg.currentLevel.objData, levelObjectsPath, Reg.tileWidth, Reg.tileHeight);
 		for (ty in 0..._objectMap.heightInTiles) 
 		{
 			for (tx in 0..._objectMap.widthInTiles) 
@@ -301,29 +297,29 @@ class PlayState extends FlxState
 						//
 					case 1: // Player
 						_objectMap.setTile(tx, ty, 0);
-						_playerSpawn.make(tx * TILE_WIDTH + TILE_HALF_WIDTH, ty * TILE_HEIGHT + TILE_HALF_HEIGHT);
+						_playerSpawn.make(tx * Reg.tileWidth + Reg.tileHalfWidth, ty * Reg.tileHeight);
 					case 2: // Mainframe
 						_objectMap.setTile(tx, ty, 0);
-						_mainframe.init(tx * TILE_WIDTH + TILE_HALF_WIDTH, ty * TILE_HEIGHT + TILE_HALF_HEIGHT, _robotGibs);
+						_mainframe.init(tx * Reg.tileWidth + Reg.tileHalfWidth, ty * Reg.tileHeight + Reg.tileHalfHeight, _robotGibs);
 					case 3: // Spawner
-						var spawnPoint:FlxPoint = new FlxPoint(tx * TILE_WIDTH + TILE_HALF_WIDTH, ty * TILE_HEIGHT + TILE_HALF_HEIGHT);
+						var spawnPoint:FlxPoint = new FlxPoint(tx * Reg.tileWidth + Reg.tileHalfWidth, ty * Reg.tileHeight + Reg.tileHalfHeight);
 						_spawnPoints.push(spawnPoint);
 					case 4: // Wall
 						_objectMap.setTile(tx, ty, 0);
 						var wall:Wall = cast(_walls.recycle(Wall), Wall);
-						wall.init(tx * TILE_WIDTH + TILE_HALF_WIDTH, ty * TILE_HEIGHT + TILE_HALF_HEIGHT, _robotGibs);
-					case 5:
+						wall.init(tx * Reg.tileWidth + Reg.tileHalfWidth, ty * Reg.tileHeight + Reg.tileHalfHeight, _robotGibs);
+					case 5: // Light
 						_objectMap.setTile(tx, ty, 0);
 						var light:Light = cast(_lights.recycle(Light), Light);
-						light.init(tx * TILE_WIDTH + TILE_HALF_WIDTH, ty * TILE_HEIGHT + TILE_HALF_HEIGHT, 0, _darkness);
-					case 6:
+						light.init(tx * Reg.tileWidth + Reg.tileHalfWidth, ty * Reg.tileHeight + Reg.tileHalfHeight, 0, _darkness);
+					case 6: // Light 2
 						_objectMap.setTile(tx, ty, 0);
 						var light:Light = cast(_lights.recycle(Light), Light);
-						light.init(tx * TILE_WIDTH + TILE_HALF_WIDTH, ty * TILE_HEIGHT + TILE_HALF_HEIGHT, 1, _darkness);
+						light.init(tx * Reg.tileWidth + Reg.tileHalfWidth, ty * Reg.tileHeight + Reg.tileHalfHeight, 1, _darkness);
 					case 7: // Heavy wall
 						_objectMap.setTile(tx, ty, 0);
 						var wall:Wall = cast(_walls.recycle(Wall), Wall);
-						wall.init(tx * TILE_WIDTH + TILE_HALF_WIDTH, ty * TILE_HEIGHT + TILE_HALF_HEIGHT, _robotGibs, true);
+						wall.init(tx * Reg.tileWidth + Reg.tileHalfWidth, ty * Reg.tileHeight + Reg.tileHalfHeight, _robotGibs, true);
 					default:
 						//trace('Unknown tile: ', tileValue);
 				}

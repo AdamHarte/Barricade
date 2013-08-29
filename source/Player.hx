@@ -18,8 +18,8 @@ import org.flixel.plugin.photonstorm.api.FlxKongregate;
  */
 class Player extends FlxSprite
 {
-	private static var MAX_HEALTH:Int = 10;
-	private static var _jumpPower:Int = 150; //200 //TODO: Find a good jump power value.
+	private static var _maxHealth:Int = 10;
+	private static var _jumpPower:Int = 300;
 	
 	public var playerMidPoint:FlxPoint;
 	
@@ -46,24 +46,23 @@ class Player extends FlxSprite
 		_reloadTimer = 0;
 		_reloadMax = 0.2;
 		
-		loadGraphic('assets/player.png', true, true, 8, 8);
-		width = 6;
-		height = 7;
-		offset.x = 1;
-		offset.y = 1;
+		loadGraphic('assets/player.png', true, true, Reg.tileWidth, Reg.tileHeight);
+		width = 12;
+		height = 16;
+		offset.x = 2;
 		
-		var runSpeed:Int = 80;
+		var runSpeed:Int = 150;
 		drag.x = runSpeed * 8;
-		acceleration.y = 420;
+		acceleration.y = 840;
 		maxVelocity.x = runSpeed;
 		maxVelocity.y = _jumpPower;
 		
-		// 2Setup animations.
+		// Setup animations.
 		addAnimation('idle', [0]);
 		addAnimation('run', [1, 2, 3, 4], 12);
 		addAnimation('jump', [4, 3, 5], 12, false);
 		
-		health = MAX_HEALTH;
+		health = _maxHealth;
 	}
 	
 	override public function destroy():Void
@@ -88,10 +87,6 @@ class Player extends FlxSprite
 		}
 		
 		getMidpoint(playerMidPoint);
-		
-		//var tx:Int = Math.round(x / PlayState.TILE_WIDTH);
-		//var ty:Int = Math.round(y / PlayState.TILE_HEIGHT);
-		//trace(tx, ty);
 		
 		// Movement
 		acceleration.x = 0;
@@ -163,7 +158,6 @@ class Player extends FlxSprite
 	override public function hurt(damage:Float):Void
 	{
 		flicker(0.2);
-		//FlxG.camera.shake(0.002, 0.2);
 		
 		super.hurt(damage);
 	}
@@ -195,7 +189,6 @@ class Player extends FlxSprite
 		_gibs.start(true, 5, 0, 35);
 		
 		FlxG.camera.shake(0.05, 0.4);
-		//FlxG.camera.flash(0xffd8eba2, 0.35);
 	}
 	
 	
@@ -208,7 +201,7 @@ class Player extends FlxSprite
 		_restart = 0;
 		exists = true;
 		visible = true;
-		health = MAX_HEALTH;
+		health = _maxHealth;
 		_reloadTimer = 0;
 		flicker(1);
 	}

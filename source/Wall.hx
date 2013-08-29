@@ -10,6 +10,9 @@ import org.flixel.FlxSprite;
  */
 class Wall extends FlxSprite
 {
+	private static var _wallHealthMax:Int = 5;
+	private static var _heavyWallHealthMax:Int = 10;
+	
 	private var _gibs:FlxEmitter;
 	
 	
@@ -17,11 +20,10 @@ class Wall extends FlxSprite
 	{
 		super();
 		
-		loadGraphic('assets/wall.png', true, false, 8, 8);
-		width = 4;
-		height = 7;
-		offset.x = 2;
-		offset.y = 0;
+		loadGraphic('assets/wall.png', true, false, Reg.tileWidth, Reg.tileHeight);
+		width = 8;
+		height = 16;
+		offset.x = 4;
 		immovable = true;
 		
 		// Setup animations.
@@ -36,7 +38,7 @@ class Wall extends FlxSprite
 	{
 		_gibs = gibs;
 		reset(xPos - width / 2, yPos - height / 2);
-		health = (heavyWall) ? 10 : 5;
+		health = (heavyWall) ? _heavyWallHealthMax : _wallHealthMax;
 		play('idle');
 	}
 	
@@ -46,11 +48,6 @@ class Wall extends FlxSprite
 		
 		_gibs = null;
 	}
-	
-	/*override public function update():Void 
-	{
-		super.update();
-	}*/
 	
 	override public function hurt(damage:Float):Void 
 	{

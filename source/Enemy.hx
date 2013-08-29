@@ -37,19 +37,19 @@ class Enemy extends FlxSprite
 	{
 		super();
 		
-		loadGraphic('assets/bot_walker.png', true, true, 8, 8);
-		width = 6;
-		height = 7;
-		offset.x = 1;
-		offset.y = 1;
+		loadGraphic('assets/bot_walker.png', true, true, Reg.tileWidth, Reg.tileHeight);
+		width = 12;
+		height = 14;
+		offset.x = 2;
+		offset.y = 2;
 		
 		_reloadTime = 2.0;
-		_jumpPower = 110;
-		_walkSpeed = FlxRandom.intRanged(25, 35) + (Reg.level * 1);
+		_jumpPower = 220;
+		_walkSpeed = FlxRandom.intRanged(50, 70) + (Reg.level * 2);
 		_jumpTimerLimit = Math.max(2.0 - (Reg.level * 0.05), 0.1);
 		
 		drag.x = _walkSpeed * 8;
-		acceleration.y = 420;
+		acceleration.y = 840;
 		maxVelocity.x = _walkSpeed;
 		maxVelocity.y = _jumpPower;
 		
@@ -78,7 +78,6 @@ class Enemy extends FlxSprite
 		_jumpTimer = 0;
 		_wakeTimer = 0;
 		_shootTimer = 0;
-		
 	}
 	
 	override public function destroy():Void 
@@ -131,10 +130,10 @@ class Enemy extends FlxSprite
 				else if (isTouching(FlxObject.FLOOR))
 				{
 					//Detect if walking off edge, and randomly decide to jump.
-					var tx:Int = Math.round(x / PlayState.TILE_WIDTH);
-					var ty:Int = Math.round(y / PlayState.TILE_HEIGHT);
+					var tx:Int = Math.round(x / Reg.tileWidth);
+					var ty:Int = Math.round(y / Reg.tileHeight);
 					var tile:Int = Reg.tileMap.getTile(tx - 1, ty + 1);
-					var chance:Int = 5; // Math.round(1 + );
+					var chance:Int = 5;
 					if (tile == 0 && FlxRandom.chanceRoll(chance)) 
 					{
 						velocity.y = -_jumpPower;

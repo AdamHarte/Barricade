@@ -18,6 +18,11 @@ import org.flixel.FlxTilemap;
  */
 class Reg
 {
+	static public var tileWidth:Int = 16;
+	static public var tileHeight:Int = 16;
+	static public var tileHalfWidth:Int = 8;
+	static public var tileHalfHeight:Int = 8;
+	
 	static public var tileMap:FlxTilemap;
 	static public var objectMap:FlxTilemap;
 	

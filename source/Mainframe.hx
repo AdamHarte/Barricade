@@ -23,11 +23,11 @@ class Mainframe extends FlxSprite
 		
 		_restart = 0;
 		
-		loadGraphic('assets/mainframe.png', true, false, 8, 8);
-		width = 6;
-		height = 7;
-		offset.x = 1;
-		offset.y = 0;
+		loadGraphic('assets/mainframe.png', true, false, Reg.tileWidth, Reg.tileHeight);
+		width = 12;
+		height = 14;
+		offset.x = 2;
+		offset.y = 2;
 		immovable = true;
 		
 		// Setup animations.

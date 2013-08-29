@@ -21,7 +21,7 @@ class Barricade extends FlxGame
 		
 		var stageWidth:Int = Lib.current.stage.stageWidth;
 		var stageHeight:Int = Lib.current.stage.stageHeight;
-		var zoomLevel:Int = 4; // 200, 120
+		var zoomLevel:Int = 2; // {400, 240}
 		var ratioX:Float = stageWidth / (800 / zoomLevel);
 		var ratioY:Float = stageHeight / (480 / zoomLevel);
 		var ratio:Float = Math.min(ratioX, ratioY);
@@ -57,7 +57,6 @@ class Barricade extends FlxGame
 		}
 		
 		#if (flash)
-		//trace(FlxKongregate.hasLoaded, FlxG.stage);
 		FlxKongregate.init(kongInitHandler);
 		#end
 		
@@ -67,7 +66,6 @@ class Barricade extends FlxGame
 	#if (flash)
 	private function kongInitHandler() 
 	{
-		//trace('init, now connecting');
 		FlxKongregate.connect();
 	}
 	#end
