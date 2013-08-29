@@ -43,6 +43,7 @@ class PlayState extends FlxState
 	private var _enemies:FlxGroup;
 	private var _bullets:FlxGroup;
 	private var _enemyBullets:FlxGroup;
+	private var _bulletTrails:FlxGroup;
 	private var _walls:FlxGroup;
 	private var _lights:FlxGroup;
 	private var _playerGibs:FlxEmitter;
@@ -103,14 +104,9 @@ class PlayState extends FlxState
 		
 		// Setup groups.
 		_enemies = new FlxGroup();
-		//_enemies.maxSize = 50;
-		
-		_bullets = new FlxGroup();
-		_bullets.maxSize = 20; //TODO: Test how big this pool should be.
-		
-		_enemyBullets = new FlxGroup();
-		_enemyBullets.maxSize = 100;
-		
+		_bullets = new FlxGroup(20);  //TODO: Test how big this pool should be.
+		_enemyBullets = new FlxGroup(100);
+		_bulletTrails = new FlxGroup(120);
 		_walls = new FlxGroup();
 		_lights = new FlxGroup();
 		
@@ -130,7 +126,7 @@ class PlayState extends FlxState
 		_darkness.scrollFactor.make();
 		_darkness.blend = BlendMode.MULTIPLY;
 		
-		_player = new Player(_playerSpawn.x, _playerSpawn.y, _bullets, _playerGibs);
+		_player = new Player(_playerSpawn.x, _playerSpawn.y, _bullets, _playerGibs, _bulletTrails);
 		
 		_hud = new HUD();
 		
@@ -149,6 +145,7 @@ class PlayState extends FlxState
 		add(_walls);
 		add(_player);
 		add(_enemies);
+		add(_bulletTrails);
 		add(_bullets);
 		add(_enemyBullets);
 		add(_playerGibs);
@@ -165,6 +162,7 @@ class PlayState extends FlxState
 		_objects.add(_player);
 		_objects.add(_enemies);
 		_objects.add(_mainframe);
+		_objects.add(_bulletTrails);
 		_objects.add(_bullets);
 		_objects.add(_enemyBullets);
 		_objects.add(_walls);
@@ -197,6 +195,7 @@ class PlayState extends FlxState
 		_player = null;
 		_enemies = null;
 		_mainframe = null;
+		_bulletTrails = null;
 		_bullets = null;
 		_enemyBullets = null;
 		_walls = null;

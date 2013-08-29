@@ -1,5 +1,6 @@
 package ;
 
+import org.flixel.addons.FlxTrail;
 import org.flixel.FlxEmitter;
 import org.flixel.FlxG;
 import org.flixel.FlxGroup;
@@ -23,6 +24,7 @@ class Player extends FlxSprite
 	public var playerMidPoint:FlxPoint;
 	
 	private var _bullets:FlxGroup;
+	private var _bulletTrails:FlxGroup;
 	private var _gibs:FlxEmitter;
 	private var _restart:Float;
 	private var _spawnPoint:FlxPoint;
@@ -30,14 +32,16 @@ class Player extends FlxSprite
 	private var _reloadMax:Float;
 	
 	
-	public function new(startX:Float, startY:Float, bullets:FlxGroup, gibs:FlxEmitter) 
+	public function new(startX:Float, startY:Float, bullets:FlxGroup, gibs:FlxEmitter, bulletTrails:FlxGroup) 
 	{
 		super(startX, startY);
 		
-		playerMidPoint = new FlxPoint();
 		_spawnPoint = new FlxPoint(startX, startY);
 		_bullets = bullets;
 		_gibs = gibs;
+		_bulletTrails = bulletTrails;
+		
+		playerMidPoint = new FlxPoint();
 		_restart = 0;
 		_reloadTimer = 0;
 		_reloadMax = 0.2;
@@ -211,7 +215,6 @@ class Player extends FlxSprite
 	
 	private function shoot(?direction:Int, ?angle:Float) 
 	{
-		trace('shoot');
 		_reloadTimer = 0;
 		
 		// Make the shoot sound.
@@ -233,6 +236,20 @@ class Player extends FlxSprite
 		else 
 		{
 			bullet.shoot(playerMidPoint, direction);
+		}
+		
+		// Add trail.
+		if (bullet.trail == null) 
+		{
+			var trail:FlxTrail = new FlxTrail(bullet, 'assets/bullet_trail.png', 4, 0, 0.8, 0.15);
+			bullet.trail = trail;
+			_bulletTrails.add(trail);
+		}
+		else 
+		{
+			bullet.trail.sprite = bullet;
+			bullet.trail.resetTrail();
+			bullet.trail.revive();
 		}
 	}
 	

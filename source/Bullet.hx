@@ -1,5 +1,6 @@
 package ;
 
+import org.flixel.addons.FlxTrail;
 import org.flixel.FlxObject;
 import org.flixel.FlxSprite;
 import org.flixel.util.FlxAngle;
@@ -12,6 +13,7 @@ import org.flixel.util.FlxPoint;
 class Bullet extends FlxSprite
 {
 	public var speed:Float;
+	public var trail:FlxTrail;
 	
 	public function new() 
 	{
@@ -26,11 +28,13 @@ class Bullet extends FlxSprite
 		offset.x = 3;
 		offset.y = 3;
 		
-		addAnimation('up', [0]);
+		/*addAnimation('up', [0]);
 		addAnimation('down', [1]);
 		addAnimation('left', [2]);
 		addAnimation('right', [3]);
-		addAnimation('hit', [4, 5, 6], 12, false);
+		addAnimation('hit', [4, 5, 6], 12, false);*/
+		addAnimation('idle', [0]);
+		addAnimation('hit', [1, 2, 3], 12, false);
 		
 	}
 	
@@ -58,6 +62,8 @@ class Bullet extends FlxSprite
 			return;
 		}
 		
+		trail.kill();
+		
 		velocity.x = 0;
 		velocity.y = 0;
 		
@@ -75,19 +81,20 @@ class Bullet extends FlxSprite
 		solid = true;
 		
 		angle = 0;
+		play('idle');
 		switch (direction) 
 		{
 			case FlxObject.UP:
-				play('up');
+				//play('up');
 				velocity.y = -speed;
 			case FlxObject.DOWN:
-				play('down');
+				//play('down');
 				velocity.y = speed;
 			case FlxObject.LEFT:
-				play('left');
+				//play('left');
 				velocity.x = -speed;
 			case FlxObject.RIGHT:
-				play('right');
+				//play('right');
 				velocity.x = speed;
 		}
 	}
@@ -97,9 +104,8 @@ class Bullet extends FlxSprite
 		super.reset(location.x - width / 2, location.y - height / 2);
 		solid = true;
 		
-		play('left');
-		angle = FlxAngle.asDegrees(rotationAngle);
-		//angle = Math.round(FlxAngle.asDegrees(rotationAngle) / 20) * 20;
+		play('idle');
+		//angle = FlxAngle.asDegrees(rotationAngle);
 		velocity.x = Math.cos(rotationAngle) * speed;
 		velocity.y = Math.sin(rotationAngle) * speed;
 	}
