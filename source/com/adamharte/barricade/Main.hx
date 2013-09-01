@@ -1,4 +1,4 @@
-package;
+package com.adamharte.barricade;
 
 import flash.display.StageAlign;
 import flash.display.StageScaleMode;

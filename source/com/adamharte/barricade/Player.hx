@@ -1,4 +1,4 @@
-package ;
+package com.adamharte.barricade;
 
 import org.flixel.addons.FlxTrail;
 import org.flixel.FlxEmitter;

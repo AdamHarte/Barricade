@@ -1,4 +1,4 @@
-package ;
+package com.adamharte.barricade;
 
 import haxe.macro.Expr.Function;
 import org.flixel.FlxEmitter;

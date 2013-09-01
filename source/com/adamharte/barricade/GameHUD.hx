@@ -1,4 +1,4 @@
-package ;
+package com.adamharte.barricade;
 
 import flash.display.Sprite;
 import flash.events.Event;

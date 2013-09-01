@@ -33,7 +33,7 @@
   </haxelib>
   <!-- Class files to compile (other referenced classes will automatically be included) -->
   <compileTargets>
-    <compile path="source\Barricade.hx" />
+    <compile path="source\com\adamharte\barricade\Barricade.hx" />
   </compileTargets>
   <!-- Assets to embed into the output SWF -->
   <library>

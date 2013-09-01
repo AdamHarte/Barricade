@@ -1,4 +1,4 @@
-package;
+package com.adamharte.barricade;
 
 import openfl.Assets;
 import flash.geom.Rectangle;

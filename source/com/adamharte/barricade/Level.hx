@@ -1,4 +1,5 @@
-package ;
+package com.adamharte.barricade;
+
 import openfl.Assets;
 import org.flixel.util.FlxPoint;
 

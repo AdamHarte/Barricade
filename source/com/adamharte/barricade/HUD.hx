@@ -1,4 +1,4 @@
-package ;
+package com.adamharte.barricade;
 
 import org.flixel.FlxGroup;
 import org.flixel.FlxSprite;

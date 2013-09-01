@@ -1,4 +1,5 @@
-package ;
+package com.adamharte.barricade;
+
 import flash.display.BitmapData;
 import flash.display.BlendMode;
 import flash.Lib;
