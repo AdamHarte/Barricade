@@ -69,28 +69,9 @@ class Bullet extends FlxSprite
 		//super.kill();
 	}
 	
-	public function shoot(location:FlxPoint, direction:Int):Void
+	public function shoot(startLocation:FlxPoint, rotationAngle:Float):Void
 	{
-		super.reset(location.x - width / 2, location.y - height / 2);
-		solid = true;
-		angle = 0;
-		play('idle');
-		switch (direction) 
-		{
-			case FlxObject.UP:
-				velocity.y = -speed;
-			case FlxObject.DOWN:
-				velocity.y = speed;
-			case FlxObject.LEFT:
-				velocity.x = -speed;
-			case FlxObject.RIGHT:
-				velocity.x = speed;
-		}
-	}
-	
-	public function shootPrecise(location:FlxPoint, rotationAngle:Float):Void
-	{
-		super.reset(location.x - width / 2, location.y - height / 2);
+		super.reset(startLocation.x - width / 2, startLocation.y - height / 2);
 		solid = true;
 		play('idle');
 		velocity.x = Math.cos(rotationAngle) * speed;

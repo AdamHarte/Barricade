@@ -133,23 +133,23 @@ class Player extends FlxSprite
 		}
 		if (FlxG.mouse.justPressed() || (shotReady && FlxG.mouse.pressed())) 
 		{
-			shoot(null, FlxAngle.angleBetweenMouse(this));
+			shoot(FlxAngle.angleBetweenMouse(this));
 		}
 		else if (FlxG.keys.justPressed('LEFT') || (shotReady && FlxG.keys.LEFT)) 
 		{
-			shoot(FlxObject.LEFT);
+			shoot(Math.PI);
 		}
 		else if (FlxG.keys.justPressed('RIGHT') || (shotReady && FlxG.keys.RIGHT)) 
 		{
-			shoot(FlxObject.RIGHT);
+			shoot(0);
 		}
 		else if (FlxG.keys.justPressed('UP') || (shotReady && FlxG.keys.UP)) 
 		{
-			shoot(FlxObject.UP);
+			shoot(Math.PI * 1.5);
 		}
 		else if (FlxG.keys.justPressed('DOWN') || (shotReady && FlxG.keys.DOWN)) 
 		{
-			shoot(FlxObject.DOWN);
+			shoot(Math.PI * 0.5);
 		}
 		
 		super.update();
@@ -206,30 +206,17 @@ class Player extends FlxSprite
 		flicker(1);
 	}
 	
-	private function shoot(?direction:Int, ?angle:Float) 
+	private function shoot(angle:Float) 
 	{
 		_reloadTimer = 0;
 		
 		// Make the shoot sound.
-		if (FlxG.timeScale < 0.7) 
-		{
-			FlxG.play('ShootSlow', 0.5);
-		}
-		else 
-		{
-			FlxG.play('Shoot', 0.5);
-		}
+		var soundId:String = (FlxG.timeScale < 0.7) ? 'ShootSlow' : 'Shoot';
+		FlxG.play(soundId, 0.5);
 		
 		// Fire the bullet.
 		var bullet:Bullet = cast(_bullets.recycle(Bullet), Bullet);
-		if (direction == null) 
-		{
-			bullet.shootPrecise(playerMidPoint, angle);
-		}
-		else 
-		{
-			bullet.shoot(playerMidPoint, direction);
-		}
+		bullet.shoot(playerMidPoint, angle);
 		
 		// Add trail.
 		if (bullet.trail == null) 
