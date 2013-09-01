@@ -1,4 +1,4 @@
-package com.adamharte.barricade;
+package com.adamharte.barricade.weapons;
 
 import org.flixel.addons.FlxTrail;
 import org.flixel.FlxObject;

@@ -1,4 +1,4 @@
-package com.adamharte.barricade;
+package com.adamharte.barricade.sprites;
 
 import org.flixel.FlxEmitter;
 import org.flixel.FlxG;

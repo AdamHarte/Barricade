@@ -1,5 +1,11 @@
 package com.adamharte.barricade;
 
+import com.adamharte.barricade.enemies.Enemy;
+import com.adamharte.barricade.sprites.Light;
+import com.adamharte.barricade.sprites.Mainframe;
+import com.adamharte.barricade.sprites.Wall;
+import com.adamharte.barricade.weapons.Bullet;
+import com.adamharte.barricade.weapons.EnemyBullet;
 import flash.display.BitmapData;
 import flash.display.BlendMode;
 import flash.Lib;

@@ -1,5 +1,6 @@
 package com.adamharte.barricade;
 
+import com.adamharte.barricade.weapons.Bullet;
 import org.flixel.addons.FlxTrail;
 import org.flixel.FlxEmitter;
 import org.flixel.FlxG;
