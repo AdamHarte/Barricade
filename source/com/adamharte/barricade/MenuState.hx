@@ -39,7 +39,7 @@ class MenuState extends FlxState
 		
 		_titleImg = new FlxSprite(0, 0, 'assets/title_screen.png');
 		_titleImg.origin.make();
-		_titleImg.scale.make(2, 2);
+		_titleImg.scale.make(4, 4);
 		add(_titleImg);
 		
 		/*var title:FlxText = new FlxText(0, FlxG.height / 3, 256, 'Barricade');
@@ -49,15 +49,14 @@ class MenuState extends FlxState
 		add(title);*/
 		
 		var credits:FlxText = new FlxText(0, 0, 256, 'by Adam Harte');
-		credits.x = (FlxG.width - credits.width) - 40;
-		credits.y = 46; // (FlxG.height - credits.height) - 1;
+		credits.x = (FlxG.width - credits.width) - 80;
+		credits.y = 92; // (FlxG.height - credits.height) - 1;
 		credits.setFormat(null, 8, 0x0e354b, 'right');
 		credits.antialiasing = true;
 		add(credits);
 		
 		_playButton = new FlxButton(0, FlxG.height * 0.6, 'PLAY', playClickHandler);
 		_playButton.x = (FlxG.width - _playButton.width) / 2;
-		_playButton.scale.make(0.8, 0.8);
 		_playButton.color = 0x31a2ee;
 		_playButton.label.color = 0x31a2ee;
 		add(_playButton);

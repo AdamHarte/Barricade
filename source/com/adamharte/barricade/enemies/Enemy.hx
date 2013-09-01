@@ -1,5 +1,6 @@
 package com.adamharte.barricade.enemies;
 
+import com.adamharte.barricade.Reg;
 import com.adamharte.barricade.sprites.Mainframe;
 import com.adamharte.barricade.weapons.EnemyBullet;
 import haxe.macro.Expr.Function;

@@ -39,6 +39,7 @@ class PlayState extends FlxState
 	private var levelObjectsPath:String;
 	
 	private var _hud:HUD;
+	private var _statusText:FlxText;
 	private var _tileMap:FlxTilemap;
 	private var _objectMap:FlxTilemap;
 	private var _player:Player;
@@ -53,7 +54,6 @@ class PlayState extends FlxState
 	private var _robotGibs:FlxEmitter;
 	private var _darkness:FlxSprite;
 	private var _warmupTimer:Float;
-	private var _statusText:FlxText;
 	
 	// Collision groups
 	private var _hazards:FlxGroup;
@@ -133,7 +133,7 @@ class PlayState extends FlxState
 		
 		_hud = new HUD();
 		
-		_statusText = new FlxText(0, FlxG.height * 0.3, 200, 'GET READY');
+		_statusText = new FlxText(0, FlxG.height * 0.30, FlxG.width, 'GET READY');
 		Reg.statusText = _statusText;
 		_statusText.setFormat(null, 14, 0xb82535, 'center');
 		_statusText.antialiasing = true;
