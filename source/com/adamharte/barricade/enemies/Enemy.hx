@@ -1,8 +1,9 @@
 package com.adamharte.barricade.enemies;
 
+import com.adamharte.barricade.Player;
 import com.adamharte.barricade.Reg;
 import com.adamharte.barricade.sprites.Mainframe;
-import com.adamharte.barricade.weapons.EnemyBullet;
+import com.adamharte.barricade.weapons.Bullet;
 import haxe.macro.Expr.Function;
 import org.flixel.FlxEmitter;
 import org.flixel.FlxG;
@@ -221,10 +222,18 @@ class Enemy extends FlxSprite
 	
 	private function shoot() 
 	{
-		FlxG.play('EnemyShoot', 0.3);
 		_shootTimer = _reloadTime;
-		var bullet:EnemyBullet = cast(_bullets.recycle(EnemyBullet), EnemyBullet);
-		bullet.shoot(getMidpoint(), FlxObject.LEFT);
+		
+		// Make the shoot sound.
+		FlxG.play('EnemyShoot', 0.3);
+		
+		// Fire the bullet.
+		var bullet:Bullet = cast(_bullets.recycle(Bullet), Bullet);
+		bullet.speed = 200;
+		bullet.shoot(getMidpoint(), Math.PI);
+		
+		
+		
 	}
 	
 	

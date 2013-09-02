@@ -5,7 +5,6 @@ import com.adamharte.barricade.sprites.Light;
 import com.adamharte.barricade.sprites.Mainframe;
 import com.adamharte.barricade.sprites.Wall;
 import com.adamharte.barricade.weapons.Bullet;
-import com.adamharte.barricade.weapons.EnemyBullet;
 import flash.display.BitmapData;
 import flash.display.BlendMode;
 import flash.Lib;
@@ -47,7 +46,6 @@ class PlayState extends FlxState
 	private var _enemies:FlxGroup;
 	private var _bullets:FlxGroup;
 	private var _enemyBullets:FlxGroup;
-	private var _bulletTrails:FlxGroup;
 	private var _walls:FlxGroup;
 	private var _lights:FlxGroup;
 	private var _playerGibs:FlxEmitter;
@@ -109,7 +107,6 @@ class PlayState extends FlxState
 		_enemies = new FlxGroup();
 		_bullets = new FlxGroup(20);  //TODO: Test how big this pool should be.
 		_enemyBullets = new FlxGroup(100);
-		_bulletTrails = new FlxGroup(120);
 		_walls = new FlxGroup();
 		_lights = new FlxGroup();
 		
@@ -129,7 +126,7 @@ class PlayState extends FlxState
 		_darkness.scrollFactor.make();
 		_darkness.blend = BlendMode.MULTIPLY;
 		
-		_player = new Player(_playerSpawn.x, _playerSpawn.y, _bullets, _playerGibs, _bulletTrails);
+		_player = new Player(_playerSpawn.x, _playerSpawn.y, _bullets, _playerGibs);
 		
 		_hud = new HUD();
 		
@@ -148,7 +145,6 @@ class PlayState extends FlxState
 		add(_walls);
 		add(_player);
 		add(_enemies);
-		add(_bulletTrails);
 		add(_bullets);
 		add(_enemyBullets);
 		add(_playerGibs);
@@ -165,7 +161,6 @@ class PlayState extends FlxState
 		_objects.add(_player);
 		_objects.add(_enemies);
 		_objects.add(_mainframe);
-		_objects.add(_bulletTrails);
 		_objects.add(_bullets);
 		_objects.add(_enemyBullets);
 		_objects.add(_walls);
@@ -198,7 +193,6 @@ class PlayState extends FlxState
 		_player = null;
 		_enemies = null;
 		_mainframe = null;
-		_bulletTrails = null;
 		_bullets = null;
 		_enemyBullets = null;
 		_walls = null;
@@ -340,7 +334,7 @@ class PlayState extends FlxState
 	
 	private function overlapHandler(sprite1:FlxObject, sprite2:FlxObject) 
 	{
-		if (Std.is(sprite1, Bullet) || Std.is(sprite1, EnemyBullet)) 
+		if (Std.is(sprite1, Bullet)) 
 		{
 			var hitSound:String = (FlxRandom.chanceRoll()) ? 'Hit1' : 'Hit2';
 			FlxG.play(hitSound, 0.5);

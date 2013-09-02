@@ -1,7 +1,6 @@
 package com.adamharte.barricade;
 
 import com.adamharte.barricade.weapons.Bullet;
-import org.flixel.addons.FlxTrail;
 import org.flixel.FlxEmitter;
 import org.flixel.FlxG;
 import org.flixel.FlxGroup;
@@ -25,7 +24,6 @@ class Player extends FlxSprite
 	public var playerMidPoint:FlxPoint;
 	
 	private var _bullets:FlxGroup;
-	private var _bulletTrails:FlxGroup;
 	private var _gibs:FlxEmitter;
 	private var _restart:Float;
 	private var _spawnPoint:FlxPoint;
@@ -33,14 +31,13 @@ class Player extends FlxSprite
 	private var _reloadMax:Float;
 	
 	
-	public function new(startX:Float, startY:Float, bullets:FlxGroup, gibs:FlxEmitter, bulletTrails:FlxGroup) 
+	public function new(startX:Float, startY:Float, bullets:FlxGroup, gibs:FlxEmitter) 
 	{
 		super(startX, startY);
 		
 		_spawnPoint = new FlxPoint(startX, startY);
 		_bullets = bullets;
 		_gibs = gibs;
-		_bulletTrails = bulletTrails;
 		
 		playerMidPoint = new FlxPoint();
 		_restart = 0;
@@ -217,21 +214,8 @@ class Player extends FlxSprite
 		
 		// Fire the bullet.
 		var bullet:Bullet = cast(_bullets.recycle(Bullet), Bullet);
+		bullet.speed = 350;
 		bullet.shoot(playerMidPoint, angle);
-		
-		// Add trail.
-		if (bullet.trail == null) 
-		{
-			var trail:FlxTrail = new FlxTrail(bullet, 'assets/bullet_trail.png', 4, 0, 0.8, 0.15);
-			bullet.trail = trail;
-			_bulletTrails.add(trail);
-		}
-		else 
-		{
-			bullet.trail.sprite = bullet;
-			bullet.trail.resetTrail();
-			bullet.trail.revive();
-		}
 	}
 	
 }

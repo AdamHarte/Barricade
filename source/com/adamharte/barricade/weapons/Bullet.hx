@@ -13,14 +13,11 @@ import org.flixel.util.FlxPoint;
 class Bullet extends FlxSprite
 {
 	public var speed:Float;
-	public var trail:FlxTrail;
 	
 	
 	public function new() 
 	{
 		super();
-		
-		speed = 350;
 		
 		loadGraphic('assets/bullet.png', true);
 		width = 4;
@@ -28,8 +25,8 @@ class Bullet extends FlxSprite
 		offset.x = 6;
 		offset.y = 6;
 		
-		addAnimation('idle', [0]);
-		addAnimation('hit', [1, 2, 3], 12, false);
+		addAnimation('idle', [2]);
+		addAnimation('hit', [4, 5, 6], 12, false);
 	}
 	
 	override public function update():Void
@@ -56,8 +53,6 @@ class Bullet extends FlxSprite
 			return;
 		}
 		
-		trail.kill();
-		
 		velocity.x = 0;
 		velocity.y = 0;
 		
@@ -74,6 +69,7 @@ class Bullet extends FlxSprite
 		super.reset(startLocation.x - width / 2, startLocation.y - height / 2);
 		solid = true;
 		play('idle');
+		angle = FlxAngle.asDegrees(rotationAngle);
 		velocity.x = Math.cos(rotationAngle) * speed;
 		velocity.y = Math.sin(rotationAngle) * speed;
 	}
