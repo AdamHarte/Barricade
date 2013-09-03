@@ -1,6 +1,8 @@
 package com.adamharte.barricade;
 
 import com.adamharte.barricade.enemies.Enemy;
+import com.adamharte.barricade.enemies.SpiderBot;
+import com.adamharte.barricade.enemies.WalkerBot;
 import com.adamharte.barricade.sprites.Light;
 import com.adamharte.barricade.sprites.Mainframe;
 import com.adamharte.barricade.sprites.Wall;
@@ -274,8 +276,17 @@ class PlayState extends FlxState
 	private function spawnEnemy() 
 	{
 		Reg.enemiesToSpawn--;
-		var enemy:Enemy = cast(_enemies.recycle(Enemy), Enemy);
-		var spawnPoint:FlxPoint = _spawnPoints[FlxRandom.intRanged(0, _spawnPoints.length-1)];
+		var spawnPoint:FlxPoint = _spawnPoints[FlxRandom.intRanged(0, _spawnPoints.length - 1)];
+		var enemy:Enemy;
+		if (FlxRandom.chanceRoll(50)) 
+		{
+			enemy = cast(_enemies.recycle(WalkerBot), Enemy);
+		}
+		else 
+		{
+			enemy = cast(_enemies.recycle(SpiderBot), Enemy);
+		}
+		
 		enemy.init(spawnPoint.x, spawnPoint.y, _enemyBullets, _player, _robotGibs, _mainframe);
 	}
 	

@@ -23,6 +23,7 @@ class Enemy extends FlxSprite
 	public var isShutdown:Bool;
 	public var atMainframe:Bool;
 	
+	private var _healthMax:Float;
 	private var _reloadTime:Float;
 	private var _jumpPower:Int;
 	private var _walkSpeed:Int;
@@ -40,31 +41,6 @@ class Enemy extends FlxSprite
 	public function new() 
 	{
 		super();
-		
-		loadGraphic('assets/bot_walker.png', true, true, Reg.tileWidth, Reg.tileHeight);
-		width = 12;
-		height = 14;
-		offset.x = 2;
-		offset.y = 2;
-		
-		_reloadTime = 2.0;
-		_jumpPower = 220;
-		_walkSpeed = FlxRandom.intRanged(50, 70) + (Reg.level * 2);
-		_jumpTimerLimit = Math.max(2.0 - (Reg.level * 0.05), 0.1);
-		
-		drag.x = _walkSpeed * 8;
-		acceleration.y = 840;
-		maxVelocity.x = _walkSpeed;
-		maxVelocity.y = _jumpPower;
-		
-		// Setup animations.
-		addAnimation('idle', [0, 1], 6);
-		addAnimation('walk', [2, 3], 6);
-		addAnimation('sleep', [4, 5, 6, 7, 8], 6, false);
-		addAnimation('wake', [8, 7, 6, 5, 4], 6, false);
-		addAnimation('hit', [9, 10, 11, 12], 6);
-		addAnimation('jump', [13, 14], 6, false);
-		
 	}
 	
 	public function init(xPos:Float, yPos:Float, bullets:FlxGroup, player:Player, gibs:FlxEmitter, mainframe:Mainframe):Void 
@@ -75,10 +51,9 @@ class Enemy extends FlxSprite
 		_mainframe = mainframe;
 		
 		reset(xPos - width / 2, yPos - height / 2);
-		health = 2;
+		health = _healthMax;
 		atMainframe = false;
 		isShutdown = false;
-		_aggression = FlxRandom.intRanged(2, 4);
 		_jumpTimer = 0;
 		_wakeTimer = 0;
 		_shootTimer = 0;
@@ -219,6 +194,8 @@ class Enemy extends FlxSprite
 		_wakeTimer = 0;
 		play('wake');
 	}
+	
+	
 	
 	private function shoot() 
 	{
