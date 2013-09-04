@@ -1,0 +1,51 @@
+ ✔ Basic enemies (spawn and kill. Always walk to the left, and shoot randomly) @done (13-08-24 23:56)
+ ✔ Enemy spawner as part of level data @done (13-08-25 03:46)
+ ✔ Mainframe to protect (x5 hits == dead) @done (13-08-25 12:54)
+ ✔ Restart level when mainframe dies. @done (13-08-25 13:57)
+ ✔ 10 second shutdown/bootup timer @done (13-08-25 16:40)
+ ✔ Make destructable walls (used to defend mainframe). @done (13-08-25 18:21)
+ ✔ Have a limit on number of enemies per level. If you kill them all, then you win. @done (13-08-25 21:22)
+ ✔ HUD - show score, and how damaged you and the mainframe are. Also show how many more robot are coming. @done (13-08-26 02:43)
+ ✔ Win screen @done (13-08-26 04:55)
+ ✔ Main menu screen (title credits, play button, instructions) @done (13-08-26 04:54)
+ ✔ Sound effects. @done (13-08-26 03:50)
+ ✔ Instructions @done (13-09-03 20:41)
+ ☐ More levels
+ ☐ Different types of enemies
+   ✔ Spider-bot @done (13-09-04 18:46)
+ ☐ Number of different types on enemies in a level is based on the level number
+ ✔ Basic enemy AI (jump, shoot when see you, move towards you or mainframe) @done (13-08-26 08:48)
+ ☐ Show some kind of "Defend the mainframe" text at beggining of level. Could also show the level name and number.
+ ☐ Need way of returning to main menu.
+ ☐ Switch tileset to dark set when in shutdown.
+ ☐ Engineering station that generates an item everytime power goes down. (health pickup, special weapon, placeable turret etc). Only opens when robots are shutdown, and closes when they boot back up. Limit one item at a time.
+   ☐ Maybe you have to press SPACE on the station in shutdown, then next shutdown it will have an item ready. If you take an item, it wont let you start building another untill next shutdown.
+ ✔ Particles when die, or when mainframe explodes, or enemies die. @done (13-08-25 16:41)
+ ☐ Landmines!
+ ☐ Give player sprite a gun. Make gun a seperate sprite so it is easy to give different guns. It should angle to mouse (if we are using mouse controls)
+ ☐ Pan to mainframe when it blows up.
+ ✔ Hold-to-fire. @done (13-09-03 20:34)
+ ✔ Make bullets be square, and have a trail effect rather than being baked in. @done (13-09-03 20:34)
+ ☐ Some weapons don't explode enemies as much, and some just vaporise the enemies. Makes it easier to see what is going on. Some enemies also explode more or have bigger gibs than others.
+ ☐ Smoke effects when some enemies are hit or explode.
+ ☐ Left hand switch option or default (use arrows to move and wasd to fire)
+ 
+ 
+ Level that enemies come from both sides.
+ 
+ Should robots come in waves?
+ 
+ need objective, and things to do along the way (micro-managment)
+
+
+
+
+
+
+
+Focus on doing the right things, not doing things right!
+
+
+
+Nice to have:
+  ☐ Slow-mo effects when you die, and zoom in on enemies shooting the mainframe.
