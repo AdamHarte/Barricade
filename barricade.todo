@@ -1,3 +1,59 @@
+
+ 
+ ☐ Show some kind of "Defend the mainframe" text at beginning of level. Could also show the level name and number.
+ ☐ Give hints on first level e.g. "Now is you chance! Destroy them while they are rebooting" & "Watch out! The robots are back online and are coming at us again"
+ ☐ Need way of returning to main menu.
+ ☐ Better tileset for levels. Add more interest.
+ ☐ Switch tileset to dark set when in shutdown.
+ ☐ Give player sprite a gun. Make gun a seperate sprite so it is easy to give different guns. It should angle to mouse (if we are using mouse controls)
+ ☐ Pan to mainframe when it blows up.
+ ☐ Show small popup camera, zooming in of points of interest, like when a bot is attacking the mainframe etc.
+ ☐ Slow-mo effects when you die, and zoom in on enemies shooting the mainframe.
+ ☐ Smoke effects when some enemies are hit or explode.
+ ☐ Smoke and explosion effects when mainframe explodes.
+ ☐ Left hand switch option or default (use arrows to move and wasd to fire)
+ ☐ need objective, and things to do along the way (micro-managment)
+ ☐ Multiple type of placable barricades with different properties (solid walls, reflecting shields, electro-shild hurts bots, energy shield stops projectiles but not bots etc).
+
+Enemy Bots:
+ Could introduce new bots every few levels.
+ Level data could contain more info of what bots will come and from where and when (like a script).
+ ☐ Spider-bot
+   ☐ Walk on walls and celling.
+   ☐ Does not shoot, but jumps at you and self destruct (area effect explosion).
+ ☐ Heavy-bot
+   ☐ 2x2 tiles big. Can not fit through small gaps.
+   ☐ Maybe he bashes through tiles when he can not fit.
+ ☐ Shield-bot
+   ☐ Has a shield that can protect other bots.
+   ☐ Shield has alot of health
+   ☐ Walker-bots will slow down and purposely hide behind Shield-bots. This can get crazy as they all stack up behind.
+ ☐ Runner-bot
+   ☐ Very fast, but low health.
+   ☐ Has a chance of shots missing.
+
+Weapons:
+ ☐ Landmines!
+ ☐ Some weapons don't explode enemies as much, and some just vaporise the enemies. Makes it easier to see what is going on. Some enemies also explode more or have bigger gibs than others.
+ ☐ Charge-up blaster. The longer you hold, the more damage it does. Will go though multiple enemies depending on how long it is changed.
+ ☐ Grenade launcher (makes use of physics)
+ ☐ Rocket launcher
+
+Levels:
+ ☐ Level where enemies come from both sides.
+ ☐ 
+
+Engineering station:
+  ☐ generates an item everytime power goes down (health pickup, special weapon, placeable turret etc).
+  ☐ Only opens when robots are shutdown, and closes when they boot back up.
+  ☐ Limit one item at a time.
+  ☐ Maybe you have to press SPACE on the station in shutdown, then next shutdown it will have an item ready. If you take an item, it wont let you start building another untill next shutdown.
+
+
+
+
+
+Archived:
  ✔ Basic enemies (spawn and kill. Always walk to the left, and shoot randomly) @done (13-08-24 23:56)
  ✔ Enemy spawner as part of level data @done (13-08-25 03:46)
  ✔ Mainframe to protect (x5 hits == dead) @done (13-08-25 12:54)
@@ -10,42 +66,8 @@
  ✔ Main menu screen (title credits, play button, instructions) @done (13-08-26 04:54)
  ✔ Sound effects. @done (13-08-26 03:50)
  ✔ Instructions @done (13-09-03 20:41)
- ☐ More levels
- ☐ Different types of enemies
-   ✔ Spider-bot @done (13-09-04 18:46)
- ☐ Number of different types on enemies in a level is based on the level number
  ✔ Basic enemy AI (jump, shoot when see you, move towards you or mainframe) @done (13-08-26 08:48)
- ☐ Show some kind of "Defend the mainframe" text at beggining of level. Could also show the level name and number.
- ☐ Need way of returning to main menu.
- ☐ Switch tileset to dark set when in shutdown.
- ☐ Engineering station that generates an item everytime power goes down. (health pickup, special weapon, placeable turret etc). Only opens when robots are shutdown, and closes when they boot back up. Limit one item at a time.
-   ☐ Maybe you have to press SPACE on the station in shutdown, then next shutdown it will have an item ready. If you take an item, it wont let you start building another untill next shutdown.
  ✔ Particles when die, or when mainframe explodes, or enemies die. @done (13-08-25 16:41)
- ☐ Landmines!
- ☐ Give player sprite a gun. Make gun a seperate sprite so it is easy to give different guns. It should angle to mouse (if we are using mouse controls)
- ☐ Pan to mainframe when it blows up.
  ✔ Hold-to-fire. @done (13-09-03 20:34)
  ✔ Make bullets be square, and have a trail effect rather than being baked in. @done (13-09-03 20:34)
- ☐ Some weapons don't explode enemies as much, and some just vaporise the enemies. Makes it easier to see what is going on. Some enemies also explode more or have bigger gibs than others.
- ☐ Smoke effects when some enemies are hit or explode.
- ☐ Left hand switch option or default (use arrows to move and wasd to fire)
  
- 
- Level that enemies come from both sides.
- 
- Should robots come in waves?
- 
- need objective, and things to do along the way (micro-managment)
-
-
-
-
-
-
-
-Focus on doing the right things, not doing things right!
-
-
-
-Nice to have:
-  ☐ Slow-mo effects when you die, and zoom in on enemies shooting the mainframe.

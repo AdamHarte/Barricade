@@ -52,6 +52,7 @@ class PlayState extends FlxState
 	private var _lights:FlxGroup;
 	private var _playerGibs:FlxEmitter;
 	private var _robotGibs:FlxEmitter;
+	private var _robotGibsSmall:FlxEmitter;
 	private var _darkness:FlxSprite;
 	private var _warmupTimer:Float;
 	
@@ -98,10 +99,18 @@ class PlayState extends FlxState
 		_robotGibs = new FlxEmitter();
 		_robotGibs.setXSpeed(-150, 150);
 		_robotGibs.setYSpeed(-200, 0);
-		_robotGibs.setRotation( -720, -720);
+		_robotGibs.setRotation(-720, -720);
 		_robotGibs.gravity = 360;
 		_robotGibs.bounce = 0.5;
 		_robotGibs.makeParticles('assets/robot_gibs.png', 100, 16, true, 0.5);
+		
+		_robotGibsSmall = new FlxEmitter();
+		_robotGibsSmall.setXSpeed(-150, 150);
+		_robotGibsSmall.setYSpeed(-200, 0);
+		_robotGibsSmall.setRotation(-720, -720);
+		_robotGibsSmall.gravity = 360;
+		_robotGibsSmall.bounce = 0.5;
+		_robotGibsSmall.makeParticles('assets/robot_gibs_sml.png', 100, 16, true, 0.5);
 		
 		_mainframe = new Mainframe();
 		
@@ -151,6 +160,7 @@ class PlayState extends FlxState
 		add(_enemyBullets);
 		add(_playerGibs);
 		add(_robotGibs);
+		add(_robotGibsSmall);
 		add(_darkness);
 		//add(_hud);
 		add(_statusText);
@@ -168,6 +178,7 @@ class PlayState extends FlxState
 		_objects.add(_walls);
 		_objects.add(_playerGibs);
 		_objects.add(_robotGibs);
+		_objects.add(_robotGibsSmall);
 		
 		_playerStructures = new FlxGroup();
 		_playerStructures.add(_mainframe);
@@ -201,6 +212,7 @@ class PlayState extends FlxState
 		_lights = null;
 		_playerGibs = null;
 		_robotGibs = null;
+		_robotGibsSmall = null;
 		_darkness = null;
 		_statusText = null;
 		
@@ -281,13 +293,15 @@ class PlayState extends FlxState
 		if (FlxRandom.chanceRoll(50)) 
 		{
 			enemy = cast(_enemies.recycle(WalkerBot), Enemy);
+			enemy.init(spawnPoint.x, spawnPoint.y, _enemyBullets, _player, _robotGibs, _mainframe);
 		}
 		else 
 		{
 			enemy = cast(_enemies.recycle(SpiderBot), Enemy);
+			enemy.init(spawnPoint.x, spawnPoint.y, _enemyBullets, _player, _robotGibsSmall, _mainframe);
 		}
 		
-		enemy.init(spawnPoint.x, spawnPoint.y, _enemyBullets, _player, _robotGibs, _mainframe);
+		
 	}
 	
 	
