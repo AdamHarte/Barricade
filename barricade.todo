@@ -18,6 +18,11 @@
 Enemy Bots:
  Could introduce new bots every few levels.
  Level data could contain more info of what bots will come and from where and when (like a script).
+ ☐ Walker-bot
+   ✔ Make them always walk in the direction of the mainframe. @done (13-09-07 16:36)
+   ☐ Some bots should target the player
+ ☐ Smart-bot
+   ☐ Can shoot in all directions, and will aim for the player.
  ☐ Spider-bot
    ☐ Walk on walls and celling.
    ☐ Does not shoot, but jumps at you and self destruct (area effect explosion).
@@ -31,15 +36,32 @@ Enemy Bots:
  ☐ Runner-bot
    ☐ Very fast, but low health.
    ☐ Has a chance of shots missing.
+ ☐ Fly-bot
+   ☐ Tiny weak flying bots that comes in swarms.
+ ☐ Sniper-bot
+   ☐ Stays far away and tries to get player in line of sight.
+   ☐ Lazer target, so you can see where they are, but they never miss if they can see you.
+   ☐ Somehow indicate when they will shoot. Maybe lazer blinks faster until it is solid. You must hide.
+ ☐ Heavy-bot
+   ☐ Explosive weapons.
+ ☐ Ninja-bot
+   ☐ Can go invisible
+   ☐ Only has melee weapon
+   ☐ Only hunts you, and does not care about mainframe
+   ☐ Can sneak past most traps and turrets.
 
 Weapons:
  ☐ Landmines!
  ☐ Some weapons don't explode enemies as much, and some just vaporise the enemies. Makes it easier to see what is going on. Some enemies also explode more or have bigger gibs than others.
- ☐ Charge-up blaster. The longer you hold, the more damage it does. Will go though multiple enemies depending on how long it is changed.
+ ☐ Charge-up blaster.
+   ☐ The longer you hold, the more damage it does.
+   ☐ Will go though multiple enemies depending on how long it is changed.
  ☐ Grenade launcher (makes use of physics)
  ☐ Rocket launcher
+ ☐ Melee weapon, like a knife or sword. Lots of damage if hit enemies from behind.
 
 Levels:
+ ☐ Make level background just another layer of tiles. Tint them darker, or use different tileset. 
  ☐ Level where enemies come from both sides.
  ☐ 
 

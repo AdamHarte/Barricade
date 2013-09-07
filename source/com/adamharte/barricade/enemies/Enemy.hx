@@ -10,6 +10,7 @@ import org.flixel.FlxG;
 import org.flixel.FlxGroup;
 import org.flixel.FlxObject;
 import org.flixel.FlxSprite;
+import org.flixel.util.FlxAngle;
 import org.flixel.util.FlxMath;
 import org.flixel.util.FlxPoint;
 import org.flixel.util.FlxRandom;
@@ -23,6 +24,8 @@ class Enemy extends FlxSprite
 	public var isShutdown:Bool;
 	public var atMainframe:Bool;
 	
+	private var _targetDirection:Int;
+	private var _target:FlxSprite; // The sprite that the enemy will walk towards and try to destroy, usually the mainframe or the player.
 	private var _healthMax:Float;
 	private var _reloadTime:Float;
 	private var _jumpPower:Int;
@@ -49,6 +52,8 @@ class Enemy extends FlxSprite
 		_bullets = bullets;
 		_gibs = gibs;
 		_mainframe = mainframe;
+		
+		_target = _mainframe;
 		
 		reset(xPos - width / 2, yPos - height / 2);
 		health = _healthMax;
@@ -85,18 +90,31 @@ class Enemy extends FlxSprite
 		
 		if (isAwake) 
 		{
+			// Set direction of the target to work out which way enemy should walk.
+			var targetAngleDelta:Float = FlxAngle.angleBetween(this, _target);
+			var halfPi:Float = (Math.PI * 0.5);
+			if (targetAngleDelta > -halfPi && targetAngleDelta < halfPi) 
+			{
+				_targetDirection = FlxObject.RIGHT;
+			}
+			else 
+			{
+				_targetDirection = FlxObject.LEFT;
+			}
+			
 			if (!flickering) 
 			{
 				if (velocity.y == 0) 
 				{
 					play('walk');
 				}
-				acceleration.x -= drag.x;
+				//acceleration.x -= drag.x;
+				acceleration.x += (_targetDirection == FlxObject.RIGHT) ? drag.x : -drag.x;
 			}
 			
 			if (!atMainframe && velocity.y == 0) 
 			{
-				if (isTouching(FlxObject.LEFT)) // blocked by anything but the mainframe.
+				if (isTouching(_targetDirection)) // blocked by anything but the mainframe.
 				{
 					_jumpTimer += FlxG.elapsed;
 					if (_jumpTimer > _jumpTimerLimit) 
@@ -111,7 +129,8 @@ class Enemy extends FlxSprite
 					//Detect if walking off edge, and randomly decide to jump.
 					var tx:Int = Math.round(x / Reg.tileWidth);
 					var ty:Int = Math.round(y / Reg.tileHeight);
-					var tile:Int = Reg.tileMap.getTile(tx - 1, ty + 1);
+					var dir:Int = (_targetDirection == FlxObject.RIGHT) ? 1 : -1;
+					var tile:Int = Reg.tileMap.getTile(tx + dir, ty + 1);
 					var chance:Int = 5;
 					if (tile == 0 && FlxRandom.chanceRoll(chance)) 
 					{
